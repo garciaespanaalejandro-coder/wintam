@@ -1,8 +1,8 @@
-# Meeplay
-Proyecto fin de DAM, consiste en el desarrollo de una aplicación móvil diseñada  para solucionar la dificultad de encontrar grupos de juegos de mesa y rol. La aplicación  permite a los usuarios actuar como anfitriones, publicando con detalles específicos como  nivel de experiencia requerido y la ubicación física de la sesión.  
+# Wintam
+Proyecto fin de DAM, consiste en el desarrollo de una aplicación móvil diseñada  para solucionar la dificultad de encontrar catas de vina cercanas. La aplicación  permite a los usuarios actuar como anfitriones, publicando con detalles específicos como  nivel de experiencia requerido y la ubicación física de la cata.  
 # Guía de Despliegue y Ejecución
 
-Esta guía detalla los pasos necesarios para levantar el entorno de desarrollo de Meeplay, compuesto por una API (Backend) y una aplicación móvil (Frontend- pendiente de desarrollo).
+Esta guía detalla los pasos necesarios para levantar el entorno de desarrollo de Wintam, compuesto por una API (Backend) y una aplicación móvil (Frontend- pendiente de desarrollo).
 
 ## 1. Requisitos Previos
 * **Entornos de desarrollo:** IntelliJ IDEA (Backend) y Android Studio (Frontend).
