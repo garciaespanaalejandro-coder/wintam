@@ -1,4 +1,4 @@
-package com.meeplay.backend.model;
+package com.winetam.model;
 
 public enum SesionStatus {
     OPEN, FULL, CANCELLED, COMPLETED

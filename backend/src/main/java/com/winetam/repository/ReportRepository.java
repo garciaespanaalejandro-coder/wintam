@@ -1,7 +1,7 @@
-package com.meeplay.backend.repository;
+package com.winetam.repository;
 
-import com.meeplay.backend.model.Report;
-import com.meeplay.backend.model.ReportStatus;
+import com.winetam.model.Report;
+import com.winetam.model.ReportStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

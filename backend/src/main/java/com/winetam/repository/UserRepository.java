@@ -1,6 +1,6 @@
-package com.meeplay.backend.repository;
+package com.winetam.repository;
 
-import com.meeplay.backend.model.User;
+import com.winetam.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.meeplay.backend.dto;
+package com.winetam.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

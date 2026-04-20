@@ -1,4 +1,4 @@
-package com.meeplay.backend.dto;
+package com.winetam.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

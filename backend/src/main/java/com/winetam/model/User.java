@@ -1,4 +1,4 @@
-package com.meeplay.backend.model;
+package com.winetam.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,4 @@
-package com.meeplay.backend.model;
-
+package com.winetam.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,29 +8,26 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reports")
+@Table(name = "inscripciones")
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
-public class Report {
+public class Inscripcion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User reporter;
+    @JoinColumn(name = "sesion_id", nullable = false)
+    private Sesion sesion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_reported_id", nullable = false)
-    private User reported;
-
-    @Column(nullable = false)
-    private String reason;
+    @JoinColumn(name = "playerr_id", nullable = false)
+    private User player;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private ReportStatus status = ReportStatus.PENDING;
+    private InscripcionStatus status = InscripcionStatus.CONFIRMED;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @Builder.Default
