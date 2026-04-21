@@ -1,4 +1,4 @@
-package com.winetam.dto;
+package com.wintam.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

@@ -1,4 +1,5 @@
-package com.winetam.model;
+package com.wintam.model;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,12 +18,12 @@ public class Inscripcion {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sesion_id", nullable = false)
-    private Sesion sesion;
+    @JoinColumn(name = "cata_id", nullable = false)
+    private Cata cata;                          // ← nombre de variable coherente
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "playerr_id", nullable = false)
-    private User player;
+    @JoinColumn(name = "player_id", nullable = false)
+    private User player;                        // ← sin doble r
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

@@ -1,6 +1,6 @@
-package com.winetam.repository;
+package com.wintam.repository;
 
-import com.winetam.model.User;
+import com.wintam.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

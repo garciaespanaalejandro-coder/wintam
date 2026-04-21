@@ -1,4 +1,4 @@
-package com.winetam.model;
+package com.wintam.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name= "user")
+@Table(name= "users")
 //lombok anotations
 @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class User implements UserDetails {
@@ -36,10 +36,10 @@ public class User implements UserDetails {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "pasword_hash", nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    private LocalDate birhdate;
+    private LocalDate birthdate;
     private String description;
 
     @Column(name="verification_code")

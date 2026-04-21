@@ -1,7 +1,7 @@
-package com.winetam.repository;
+package com.wintam.repository;
 
-import com.winetam.model.Report;
-import com.winetam.model.ReportStatus;
+import com.wintam.model.Report;
+import com.wintam.model.ReportStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

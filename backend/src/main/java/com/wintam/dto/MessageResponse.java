@@ -1,4 +1,4 @@
-package com.winetam.dto;
+package com.wintam.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

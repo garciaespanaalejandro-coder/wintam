@@ -1,5 +1,5 @@
-package com.winetam.security;
-import com.winetam.repository.UserRepository;
+package com.wintam.security;
+import com.wintam.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

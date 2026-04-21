@@ -34,7 +34,6 @@ build/
 
 ### .ENV OCULTADO###
 .env
-application.properties
 target/
 .idea/
 *.iml

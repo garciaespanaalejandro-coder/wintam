@@ -1,4 +1,4 @@
-package com.winetam.model;
+package com.wintam.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,11 +18,11 @@ public class Report {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "reporter_id", nullable = false)
     private User reporter;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_reported_id", nullable = false)
+    @JoinColumn(name = "reported_id", nullable = false)
     private User reported;
 
     @Column(nullable = false)
