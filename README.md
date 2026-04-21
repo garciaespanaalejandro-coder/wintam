@@ -1,5 +1,5 @@
 # Wintam
-Proyecto fin de DAM, consiste en el desarrollo de una aplicación móvil diseñada  para solucionar la dificultad de encontrar catas de vina cercanas. La aplicación  permite a los usuarios actuar como anfitriones, publicando con detalles específicos como  nivel de experiencia requerido y la ubicación física de la cata.  
+Proyecto fin de DAM, consiste en el desarrollo de una aplicación móvil diseñada  para solucionar la dificultad de encontrar catas de vino cercanas. La aplicación  permite a los usuarios actuar como anfitriones, publicando con detalles específicos como  nivel de experiencia requerido y la ubicación física de la cata.  
 # Guía de Despliegue y Ejecución
 
 Esta guía detalla los pasos necesarios para levantar el entorno de desarrollo de Wintam, compuesto por una API (Backend) y una aplicación móvil (Frontend- pendiente de desarrollo).
@@ -14,7 +14,7 @@ Esta guía detalla los pasos necesarios para levantar el entorno de desarrollo d
 ### Clonar el proyecto
 Abre tu terminal y ejecuta:
 ```bash
-git clone https://github.com/garciaespanaalejandro-coder/meeplay.git
+https://github.com/garciaespanaalejandro-coder/wintam.git
 ```
 Arrancar el Backend:
   1.  Abrir IntelliJ, selecciona File>Open... y elige la carpeta backend.
