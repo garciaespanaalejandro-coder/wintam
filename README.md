@@ -14,8 +14,8 @@ Esta guía detalla los pasos necesarios para levantar el entorno de desarrollo d
 ### Clonar el proyecto
 Abre tu terminal y ejecuta:
 ```bash
-git clone https://github.com/garciaespanaalejandro-coder/meeplay.git
-```
+[git clone https://github.com/garciaespanaalejandro-coder/meeplay.git
+](https://github.com/garciaespanaalejandro-coder/wintam.git)```
 Arrancar el Backend:
   1.  Abrir IntelliJ, selecciona File>Open... y elige la carpeta backend.
   2.  Espera a que se descarguen las dependencias del proyecto.
