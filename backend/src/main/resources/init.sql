@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS wintam
 USE wintam;
 
 CREATE TABLE IF NOT EXISTS users (
-    id                INT          AUTO_INCREMENT PRIMARY KEY,
+    id                BIGINT          AUTO_INCREMENT PRIMARY KEY,
     name              VARCHAR(100)    NOT NULL,
     surname           VARCHAR(100)    NOT NULL,
     username          VARCHAR(50)     NOT NULL UNIQUE,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS catas (
-    id                INT          AUTO_INCREMENT PRIMARY KEY,
+    id                BIGINT          AUTO_INCREMENT PRIMARY KEY,
     title             VARCHAR(150)    NOT NULL,
     wine_type         VARCHAR(100)    NOT NULL,
     experience_level  ENUM('BEGINNER','INTERMEDIATE','EXPERT') NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS catas (
     scheduled_time    TIME            NOT NULL,
     max_attendees     INT             NOT NULL,
     status            ENUM('OPEN','FULL','CANCELLED','COMPLETED') NOT NULL DEFAULT 'OPEN',
-    attendance_code   VARCHAR(5),                        -- código 5 dígitos
+    attendance_code   VARCHAR(5),
     code_generated_at DATETIME,
     host_id           BIGINT          NOT NULL,
     created_at        DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS inscripciones (
     status      ENUM('CONFIRMED','CANCELLED','ATTENDED','NO_SHOW') NOT NULL DEFAULT 'CONFIRMED',
     created_at  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    --Un usuario no puede inscribirse dos veces en la misma cata
     CONSTRAINT uq_inscripcion   UNIQUE (cata_id, player_id),
     CONSTRAINT fk_insc_cata     FOREIGN KEY (cata_id)   REFERENCES catas(id),
     CONSTRAINT fk_insc_player   FOREIGN KEY (player_id) REFERENCES users(id)
@@ -63,9 +62,7 @@ CREATE TABLE IF NOT EXISTS reports (
     CONSTRAINT fk_report_reported FOREIGN KEY (reported_id) REFERENCES users(id)
 );
 
--- ── USUARIO ADMIN POR DEFECTO ─────────────────────────────────
--- Contraseña: admin1234  (BCrypt · cámbiar en producción)
-INSERT INTO users (name, surname, username, email, password_hash, is_verified, role, karma)
+INSERT IGNORE INTO users (name, surname, username, email, password_hash, is_verified, role, karma)
 VALUES (
     'Admin',
     'wintam',

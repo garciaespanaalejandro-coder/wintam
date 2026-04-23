@@ -31,16 +31,15 @@ public class AuthServiceSpring implements AuthService{
     }
 
     @Override
-    @Transactional()
+    @Transactional
     public MessageResponse createAccount(RegisterRequest request) {
+        String code= getCode();
         if(user.existsByEmail(request.getEmail())){
             throw new EmailAlreadyExistsException(request.getEmail());
         }
         if (user.findByUsername(request.getUsername()).isPresent()) {
             throw new UserAlreadyExistsException(request.getUsername());
         }
-
-        String code = String.valueOf((int)(Math.random() * 900000) + 100000);
 
         User user1=  User.builder()
                 .name(request.getName())
@@ -97,13 +96,35 @@ public class AuthServiceSpring implements AuthService{
     }
 
     @Override
+    @Transactional
     public MessageResponse recoverPassword(RecoverRequest request) {
-        return null;
+        User usuario= user.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+        String code= getCode();
+        usuario.setVerificationCode(code);
+        user.save(usuario);
+        emailService.sendRecoverPassword(request.getEmail(),code);
+        return new MessageResponse("Te hemos enviado un código a tu correo para recuperar tu contraseña.");
     }
 
     @Override
+    @Transactional
     public MessageResponse resetPassword(ResetPasswordRequest request) {
-        return null;
+        User usuario = user.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+
+        if (!usuario.getVerificationCode().equals(request.getCode())){
+            throw new InvalidCodeException();
+        }
+
+        usuario.setPasswordHash(passwordEncoder.encode(request.getNewPassword()));
+
+        usuario.setVerificationCode(null);
+        user.save(usuario);
+
+        return new MessageResponse("¡Contraseña recuperada correctamente!");
     }
 
+    private String getCode(){
+        return String.valueOf((int)(Math.random() * 900000) + 100000);
+    }
 }

@@ -12,8 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> {
-    List<Inscripcion> findBySesion(Cata sesion);
+    List<Inscripcion> findByCata(Cata cata);
     List<Inscripcion> findByPlayer(User player);
-    Optional<Inscripcion> findBySesionAndPlayer(Cata sesion, User player);
-    int countBySesionAndStatus(Cata sesion, InscripcionStatus status);
+    Optional<Inscripcion> findByCataAndPlayer(Cata cata, User player);
+    int countByCataAndStatus(Cata cata, InscripcionStatus status);
 }
