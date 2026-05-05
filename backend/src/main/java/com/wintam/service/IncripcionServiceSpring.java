@@ -2,10 +2,7 @@ package com.wintam.service;
 
 import com.wintam.dto.ConfirmAttendanceRequest;
 import com.wintam.dto.MessageResponse;
-import com.wintam.exception.CataNotFoundException;
-import com.wintam.exception.InvalidCataStatusException;
-import com.wintam.exception.UserAlreadyJoinedException;
-import com.wintam.exception.UserNotJoinedException;
+import com.wintam.exception.*;
 import com.wintam.model.*;
 import com.wintam.repository.CataRepository;
 import com.wintam.repository.InscripcionRepository;
@@ -90,8 +87,21 @@ public class IncripcionServiceSpring implements InscripcionService{
     }
 
     @Override
+    @Transactional
     public MessageResponse confirmAttendance(ConfirmAttendanceRequest request) {
+        Cata cata = cataDAO.findById(request.getCataId())
+                .orElseThrow(() -> new CataNotFoundException(request.getCataId()));
+        User usuario = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        if (cata.getAttendanceCode() == null || !cata.getAttendanceCode().equals(request.getCode())) {
+            throw new CodeDontMatchException();
+        }
+        Inscripcion inscripcion = inscripcionDAO.findByCataAndPlayer(cata, usuario)
+                .orElseThrow(UserNotJoinedException::new);
+
+        inscripcion.setStatus(InscripcionStatus.ATTENDED);
+        inscripcionDAO.save(inscripcion);
+        return new MessageResponse("Asistencia confirmada correctamente.");
     }
 }
 
