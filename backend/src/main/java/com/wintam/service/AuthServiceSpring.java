@@ -76,8 +76,7 @@ public class AuthServiceSpring implements AuthService{
     @Transactional
     public AuthResponse verifyEmail(VerifiyRequest request) {
 
-        User usuario = user.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+        User usuario = user.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException(request.getEmail()));
 
         if (usuario.getIsVerified()) {
             throw new AccountAlreadyVerifiedException(request.getEmail());

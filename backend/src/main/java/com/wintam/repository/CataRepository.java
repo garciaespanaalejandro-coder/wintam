@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface CataRepository extends JpaRepository<Cata, Long> {
     List<Cata> findByHost(User host);
+    boolean existsByTitle(String title);
 }

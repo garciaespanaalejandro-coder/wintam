@@ -1,8 +1,13 @@
 package com.wintam.service;
 
-import com.wintam.dto.CreateCataRequest;
-import com.wintam.dto.MessageResponse;
+import com.wintam.dto.*;
+
+import java.util.List;
 
 public interface CataService {
-    public MessageResponse createCata(CreateCataRequest createCataRequest);
+    MessageResponse createCata(CreateCataRequest createCataRequest);
+    List<CataResponse> searchCatas(SearchCatasRequest searchCatasRequest);
+    MessageResponse cancelCata(Long id);
+    AttendanceCodeResponse startCata(Long id);
+    List<CataResponse> getAllCatas();
 }

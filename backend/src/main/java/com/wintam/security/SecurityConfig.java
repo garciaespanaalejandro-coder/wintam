@@ -47,7 +47,6 @@ public class SecurityConfig {
                         // ── Rutas solo para ADMIN ───────────────────────────────────
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                        // ── Todo lo demás requiere autenticación ────────────────────
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
