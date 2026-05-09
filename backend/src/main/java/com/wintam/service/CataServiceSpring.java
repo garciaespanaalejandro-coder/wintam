@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +25,13 @@ import java.util.Map;
 @Service
 public class CataServiceSpring implements CataService{
     private final CataRepository cataDAO;
+    private final KarmaService karma;
     @PersistenceContext
     private EntityManager entityManager;
 
-    public CataServiceSpring(CataRepository cataDAO) {
+    public CataServiceSpring(CataRepository cataDAO, KarmaService karma) {
         this.cataDAO = cataDAO;
+        this.karma = karma;
     }
 
     @Transactional
@@ -104,6 +107,13 @@ public class CataServiceSpring implements CataService{
         }
         if (cata.getStatus() == CataStatus.CANCELLED || cata.getStatus() == CataStatus.COMPLETED) {
             throw new InvalidCataStatusException(cata.getStatus());
+        }
+        LocalDateTime fechaCata = LocalDateTime.of(cata.getScheduleDate(), cata.getScheduledTime());
+
+        long horas = ChronoUnit.HOURS.between(LocalDateTime.now(), fechaCata);
+
+        if (horas<=24){
+            karma.penalizeHost(usuario);
         }
         cata.setStatus(CataStatus.CANCELLED);
         cataDAO.save(cata);

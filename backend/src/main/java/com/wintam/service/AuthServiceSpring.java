@@ -12,8 +12,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class AuthServiceSpring implements AuthService{
     private final UserRepository user;
@@ -57,7 +55,7 @@ public class AuthServiceSpring implements AuthService{
 
     @Override
     public AuthResponse signInAccount(LoginRequest request) {
-        User user1= user.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+        User user1= user.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException());
         if(!user1.getIsVerified()){
             throw new EmailNotVerifiedException(user1.getEmail());
         }
@@ -76,7 +74,7 @@ public class AuthServiceSpring implements AuthService{
     @Transactional
     public AuthResponse verifyEmail(VerifiyRequest request) {
 
-        User usuario = user.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+        User usuario = user.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException());
 
         if (usuario.getIsVerified()) {
             throw new AccountAlreadyVerifiedException(request.getEmail());
@@ -97,7 +95,7 @@ public class AuthServiceSpring implements AuthService{
     @Override
     @Transactional
     public MessageResponse recoverPassword(RecoverRequest request) {
-        User usuario= user.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+        User usuario= user.findByEmail(request.getEmail()).orElseThrow(() -> new UserNotFoundException());
         String code= getCode();
         usuario.setVerificationCode(code);
         user.save(usuario);
@@ -109,7 +107,7 @@ public class AuthServiceSpring implements AuthService{
     @Transactional
     public MessageResponse resetPassword(ResetPasswordRequest request) {
         User usuario = user.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+                .orElseThrow(() -> new UserNotFoundException());
 
         if (!usuario.getVerificationCode().equals(request.getCode())){
             throw new InvalidCodeException();

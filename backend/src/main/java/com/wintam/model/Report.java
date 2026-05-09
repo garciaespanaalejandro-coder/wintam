@@ -30,6 +30,10 @@ public class Report {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private SanctionType sanctionType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     @Builder.Default
     private ReportStatus status = ReportStatus.PENDING;
 

@@ -39,9 +39,9 @@ CREATE TABLE IF NOT EXISTS catas (
 );
 
 CREATE TABLE IF NOT EXISTS inscripciones (
-    id          BIGINT      AUTO_INCREMENT PRIMARY KEY,
-    cata_id     BIGINT      NOT NULL,
-    player_id   BIGINT      NOT NULL,
+    id  BIGINT  AUTO_INCREMENT PRIMARY KEY,
+    cata_id BIGINT  NOT NULL,
+    player_id   BIGINT  NOT NULL,
     status      ENUM('CONFIRMED','CANCELLED','ATTENDED','NO_SHOW') NOT NULL DEFAULT 'CONFIRMED',
     created_at  DATETIME    NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -51,12 +51,13 @@ CREATE TABLE IF NOT EXISTS inscripciones (
 );
 
 CREATE TABLE IF NOT EXISTS reports (
-    id           BIGINT   AUTO_INCREMENT PRIMARY KEY,
-    reporter_id  BIGINT   NOT NULL,
-    reported_id  BIGINT   NOT NULL,
-    reason       TEXT     NOT NULL,
-    status       ENUM('PENDING','RESOLVED','DISMISSED') NOT NULL DEFAULT 'PENDING',
-    created_at   DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id            BIGINT   AUTO_INCREMENT PRIMARY KEY,
+    reporter_id   BIGINT   NOT NULL,
+    reported_id   BIGINT   NOT NULL,
+    reason        TEXT     NOT NULL,
+    sanction_type ENUM('WARNING','KARMA_PENALTY','BAN'),
+    status        ENUM('PENDING','RESOLVED','DISMISSED') NOT NULL DEFAULT 'PENDING',
+    created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_report_reporter FOREIGN KEY (reporter_id) REFERENCES users(id),
     CONSTRAINT fk_report_reported FOREIGN KEY (reported_id) REFERENCES users(id)

@@ -17,10 +17,11 @@ import java.util.Optional;
 public class IncripcionServiceSpring implements InscripcionService{
     private final InscripcionRepository inscripcionDAO;
     private final CataRepository cataDAO;
-
-    public IncripcionServiceSpring(InscripcionRepository inscripcionDAO, CataRepository cataDAO) {
+    private final KarmaService karma;
+    public IncripcionServiceSpring(InscripcionRepository inscripcionDAO, CataRepository cataDAO, KarmaService karma) {
         this.inscripcionDAO = inscripcionDAO;
         this.cataDAO = cataDAO;
+        this.karma = karma;
     }
 
 
@@ -80,7 +81,7 @@ public class IncripcionServiceSpring implements InscripcionService{
         long horas = ChronoUnit.HOURS.between(LocalDateTime.now(), fechaCata);
 
         if (horas<=24){
-            //TODO: restar karma al usuario con karmaservice
+            karma.penalizeAttendee(usuario);
         }
 
         return new MessageResponse("Usuario ha cancelado la sesión correctamente.");
@@ -98,7 +99,7 @@ public class IncripcionServiceSpring implements InscripcionService{
         }
         Inscripcion inscripcion = inscripcionDAO.findByCataAndPlayer(cata, usuario)
                 .orElseThrow(UserNotJoinedException::new);
-
+        karma.rewardAttendance(usuario);
         inscripcion.setStatus(InscripcionStatus.ATTENDED);
         inscripcionDAO.save(inscripcion);
         return new MessageResponse("Asistencia confirmada correctamente.");
