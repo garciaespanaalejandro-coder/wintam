@@ -29,4 +29,16 @@ public class EmailService {
                 "\n Este código expirará en 24 horas.");
         mailSender.send(message);
     }
+
+    public void sendAdvice(String email){
+        SimpleMailMessage message= new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Wintam- Aviso de conducta");
+        message.setText("Has recibido un aviso por conducta inadecuada en Wintam.\n\n" +
+                "Nuestro equipo ha revisado un reporte sobre tu comportamiento y " +
+                "queremos recordarte que debes respetar las normas de la comunidad.\n\n" +
+                "Reincidencias pueden resultar en penalizaciones de Karma o el baneo permanente de tu cuenta.\n\n" +
+                "El equipo de Wintam.");
+        mailSender.send(message);
+    }
 }

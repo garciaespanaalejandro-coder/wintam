@@ -69,5 +69,5 @@ public class User implements UserDetails {
     @Override public String getPassword() { return passwordHash; }
 
     @Override public String getUsername() { return username; }
-    @Override public boolean isEnabled() { return isVerified; }
+    @Override public boolean isEnabled() { return isVerified && role != Role.BANNED;}
 }
