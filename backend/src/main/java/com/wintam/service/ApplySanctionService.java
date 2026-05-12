@@ -1,5 +1,6 @@
 package com.wintam.service;
 
+import com.wintam.model.Role;
 import com.wintam.model.SanctionType;
 import com.wintam.model.User;
 import com.wintam.repository.UserRepository;
@@ -7,7 +8,6 @@ import lombok.Builder;
 import org.springframework.stereotype.Service;
 
 @Service
-@Builder
 public class ApplySanctionService {
 
     private final KarmaService karma;
@@ -22,7 +22,7 @@ public class ApplySanctionService {
             case WARNING -> {}
             case KARMA_PENALTY -> karma.penalizeAttendee(reported);
             case BAN ->{
-                reported.setIsVerified(false);
+                reported.setRole(Role.BANNED);
                 userRepository.save(reported);
             }
         }

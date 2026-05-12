@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
     description       TEXT,
     verification_code VARCHAR(10),
     is_verified       BOOLEAN         NOT NULL DEFAULT FALSE,
-    role              ENUM('USER','ADMIN') NOT NULL DEFAULT 'USER',
+    role              ENUM('USER','ADMIN', 'BANNED') NOT NULL DEFAULT 'USER',
     karma             INT             NOT NULL DEFAULT 50,
     created_at        DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

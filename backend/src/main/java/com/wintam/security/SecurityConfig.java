@@ -46,7 +46,7 @@ public class SecurityConfig {
                         ).permitAll()
                         // ── Rutas solo para ADMIN ───────────────────────────────────
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
+                        .requestMatchers("/api/**").not().hasRole("BANNED")
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider())
