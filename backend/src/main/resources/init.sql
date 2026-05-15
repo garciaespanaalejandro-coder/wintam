@@ -1,8 +1,8 @@
-CREATE DATABASE IF NOT EXISTS wintam
-    CHARACTER SET utf8mb4
-    COLLATE utf8mb4_unicode_ci;
-
-USE wintam;
+--CREATE DATABASE IF NOT EXISTS wintam
+--    CHARACTER SET utf8mb4
+--    COLLATE utf8mb4_unicode_ci;
+--
+--USE wintam;
 
 CREATE TABLE IF NOT EXISTS users (
     id                BIGINT          AUTO_INCREMENT PRIMARY KEY,
