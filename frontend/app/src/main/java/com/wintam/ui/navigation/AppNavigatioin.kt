@@ -12,3 +12,32 @@ import com.wintam.ui.screens.SplashScreen
 import com.wintam.viewmodel.AuthViewModel
 import com.wintam.viewmodel.AuthViewModelFactory
 
+@Composable
+fun AppNavigation(){
+    val navController= rememberNavController()
+    val context= LocalContext.current
+    val tokenManager= TokenManager(context)
+    val repository= AuthRepository(tokenManager)
+    val authViewModel: AuthViewModel= viewModel(
+        factory = AuthViewModelFactory(repository)
+    )
+
+    NavHost(
+        navController= navController,
+        startDestination = "splash"
+    ){
+        composable("splash"){
+            SplashScreen(
+                onNavigateToLogin = {
+                    navController.navigate("login"){
+                        popUpTo("splash") { inclusive= true}
+                    }
+                }
+            )
+        }
+
+        composable("login"){
+
+        }
+    }
+}

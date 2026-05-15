@@ -43,9 +43,11 @@ fun SplashScreen(onNavigateToLogin: ()-> Unit){
                 Brush.verticalGradient(
                     colors= listOf(BurgundyDark, Burgundy)
                 )
-            )
+            ),
+        contentAlignment = Alignment.Center
     ){
         Column(
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
