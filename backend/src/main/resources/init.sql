@@ -63,14 +63,3 @@ CREATE TABLE IF NOT EXISTS reports (
     CONSTRAINT fk_report_reported FOREIGN KEY (reported_id) REFERENCES users(id)
 );
 
-INSERT IGNORE INTO users (name, surname, username, email, password_hash, is_verified, role, karma)
-VALUES (
-    'Admin',
-    'wintam',
-    'admin',
-    'admin@wintam.com',
-    '$2a$10$7QBBBmXxXQ6JpRBc1W1l3.gkI7H/ZxW6w5J5K8rN2eYqM0Pf3u0Oy',
-    TRUE,
-    'ADMIN',
-    100
-);
