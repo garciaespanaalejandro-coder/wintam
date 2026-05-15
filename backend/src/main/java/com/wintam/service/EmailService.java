@@ -3,6 +3,7 @@ package com.wintam.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class EmailService {
     private final JavaMailSender mailSender;
 
+    @Async // <-- 2. Añadir aquí
     public void sendVerificationEmail(String email, String code){
         SimpleMailMessage message= new SimpleMailMessage();
         message.setTo(email);
@@ -19,7 +21,7 @@ public class EmailService {
                 "\n Este código expirará en 24 horas.");
         mailSender.send(message);
     }
-
+    @Async // <-- 2. Añadir aquí
     public void sendRecoverPassword(String email, String code){
         SimpleMailMessage message= new SimpleMailMessage();
         message.setTo(email);
@@ -29,7 +31,7 @@ public class EmailService {
                 "\n Este código expirará en 24 horas.");
         mailSender.send(message);
     }
-
+    @Async // <-- 2. Añadir aquí
     public void sendAdvice(String email){
         SimpleMailMessage message= new SimpleMailMessage();
         message.setTo(email);
