@@ -13,6 +13,7 @@ import com.wintam.data.repository.AuthRepository
 import com.wintam.ui.screens.LoginScreen
 import com.wintam.ui.screens.RecoverPasswordScreen
 import com.wintam.ui.screens.RegisterScreen
+import com.wintam.ui.screens.ResetPasswordScreen
 import com.wintam.ui.screens.SplashScreen
 import com.wintam.ui.screens.VerifyEmailScreen
 import com.wintam.viewmodel.AuthViewModel
@@ -93,6 +94,17 @@ fun AppNavigation(){
                 onNavigateToResetPassword = {
                     navController.navigate("resetPassword"){
                         popUpTo("recoverPassword") {inclusive = true}
+                    }
+                }
+            )
+        }
+
+        composable("resetPassword"){
+            ResetPasswordScreen(
+                viewModel= authViewModel,
+                onNavigateToLogin = {
+                    navController.navigate("login"){
+                        popUpTo("resetPassword") {inclusive = true}
                     }
                 }
             )
