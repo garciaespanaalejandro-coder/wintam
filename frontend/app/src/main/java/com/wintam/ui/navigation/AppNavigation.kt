@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.wintam.data.TokenManager
 import com.wintam.data.repository.AuthRepository
+import com.wintam.ui.screens.LoginScreen
 import com.wintam.ui.screens.SplashScreen
 import com.wintam.viewmodel.AuthViewModel
 import com.wintam.viewmodel.AuthViewModelFactory
@@ -37,7 +38,20 @@ fun AppNavigation(){
         }
 
         composable("login"){
-
+            LoginScreen(
+                viewModel = authViewModel,
+                onLoginSuccess = {
+                    navController.navigate("feed") {
+                        popUpTo("login") { inclusive = true }
+                    }
+                },
+                onNavigateToRegister = {
+                    navController.navigate("register")
+                },
+                onNavigateToRecoverPassword = {
+                    navController.navigate("recoverPassword")
+                }
+            )
         }
     }
 }
