@@ -1,5 +1,7 @@
 package com.wintam.ui.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -9,10 +11,12 @@ import androidx.navigation.compose.rememberNavController
 import com.wintam.data.TokenManager
 import com.wintam.data.repository.AuthRepository
 import com.wintam.ui.screens.LoginScreen
+import com.wintam.ui.screens.RegisterScreen
 import com.wintam.ui.screens.SplashScreen
 import com.wintam.viewmodel.AuthViewModel
 import com.wintam.viewmodel.AuthViewModelFactory
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(){
     val navController= rememberNavController()
@@ -50,6 +54,22 @@ fun AppNavigation(){
                 },
                 onNavigateToRecoverPassword = {
                     navController.navigate("recoverPassword")
+                }
+            )
+        }
+
+        composable("register"){
+            RegisterScreen(
+                viewModel= authViewModel,
+                onNavigateToVerify= {
+                    navController.navigate("verify"){
+                        popUpTo("register") { inclusive = true }
+                    }
+                },
+                onNavigateToLogin = {
+                    navController.navigate("login"){
+                        popUpTo("register") { inclusive = true}
+                    }
                 }
             )
         }

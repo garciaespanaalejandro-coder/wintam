@@ -18,10 +18,12 @@ sealed class AuthUiState{
 class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     private val _uiState= MutableStateFlow<AuthUiState>(AuthUiState.Idle)
     val uiState: StateFlow<AuthUiState> = _uiState
-
+    private val _pendingEmail = MutableStateFlow("")
+    val pendingEmail: StateFlow<String> = _pendingEmail
     fun register(request: RegisterRequest) {
         viewModelScope.launch {
             _uiState.value = AuthUiState.Loading
+            _pendingEmail.value= request.email
             repository.register(request).fold(
                 onSuccess = { _uiState.value = AuthUiState.Success(it.message) },
                 onFailure = { _uiState.value = AuthUiState.Error(it.message ?: "Error desconocido") }
