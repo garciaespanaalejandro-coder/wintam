@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.wintam.data.TokenManager
 import com.wintam.data.repository.AuthRepository
 import com.wintam.ui.screens.LoginScreen
+import com.wintam.ui.screens.RecoverPasswordScreen
 import com.wintam.ui.screens.RegisterScreen
 import com.wintam.ui.screens.SplashScreen
 import com.wintam.ui.screens.VerifyEmailScreen
@@ -81,6 +82,17 @@ fun AppNavigation(){
                 onVerifySuccess={
                     navController.navigate("feed"){
                         popUpTo("verify") {inclusive = true}
+                    }
+                }
+            )
+        }
+
+        composable("recoverPassword"){
+            RecoverPasswordScreen(
+                viewModel= authViewModel,
+                onNavigateToResetPassword = {
+                    navController.navigate("resetPassword"){
+                        popUpTo("recoverPassword") {inclusive = true}
                     }
                 }
             )
