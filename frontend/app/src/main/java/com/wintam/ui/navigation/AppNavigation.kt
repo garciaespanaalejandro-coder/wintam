@@ -13,6 +13,7 @@ import com.wintam.data.repository.AuthRepository
 import com.wintam.ui.screens.LoginScreen
 import com.wintam.ui.screens.RegisterScreen
 import com.wintam.ui.screens.SplashScreen
+import com.wintam.ui.screens.VerifyEmailScreen
 import com.wintam.viewmodel.AuthViewModel
 import com.wintam.viewmodel.AuthViewModelFactory
 
@@ -69,6 +70,17 @@ fun AppNavigation(){
                 onNavigateToLogin = {
                     navController.navigate("login"){
                         popUpTo("register") { inclusive = true}
+                    }
+                }
+            )
+        }
+
+        composable("verify"){
+            VerifyEmailScreen(
+                viewModel = authViewModel,
+                onVerifySuccess={
+                    navController.navigate("feed"){
+                        popUpTo("verify") {inclusive = true}
                     }
                 }
             )
