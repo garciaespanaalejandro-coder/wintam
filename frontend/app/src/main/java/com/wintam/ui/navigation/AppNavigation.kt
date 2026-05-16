@@ -109,5 +109,9 @@ fun AppNavigation(){
                 }
             )
         }
+
+        composable("feed"){
+            //TODO: FeedScreen
+        }
     }
 }
