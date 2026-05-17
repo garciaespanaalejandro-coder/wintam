@@ -11,6 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import com.wintam.data.TokenManager
 import com.wintam.data.repository.AuthRepository
 import com.wintam.data.repository.CataRepository
+import com.wintam.data.repository.InscripcionRepository
+import com.wintam.ui.screens.CataDetailScreen
 import com.wintam.ui.screens.FeedScreen
 import com.wintam.ui.screens.LoginScreen
 import com.wintam.ui.screens.RecoverPasswordScreen
@@ -22,6 +24,8 @@ import com.wintam.viewmodel.AuthViewModel
 import com.wintam.viewmodel.AuthViewModelFactory
 import com.wintam.viewmodel.CataViewModel
 import com.wintam.viewmodel.CataViewModelFactory
+import com.wintam.viewmodel.InscripcionViewModel
+import com.wintam.viewmodel.InscripcionViewModelFactory
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -37,6 +41,11 @@ fun AppNavigation(){
     val cataRepository= CataRepository(tokenManager)
     val cataViewModel: CataViewModel= viewModel(
         factory = CataViewModelFactory(cataRepository)
+    )
+
+    val inscripcionRepository = InscripcionRepository(tokenManager)
+    val inscripcionViewModel: InscripcionViewModel = viewModel(
+        factory = InscripcionViewModelFactory(inscripcionRepository)
     )
 
     NavHost(
@@ -123,6 +132,7 @@ fun AppNavigation(){
             FeedScreen(
                 viewModel=cataViewModel,
                 onNavigateToCataDetail = { id ->
+                    cataViewModel.selectCata(id)
                     navController.navigate("cataDetail/$id")
                 },
                 onNavigateToProfile = {
@@ -134,6 +144,14 @@ fun AppNavigation(){
                 onNavigateToCreateCata = {
                     navController.navigate("createCata")
                 }
+            )
+        }
+
+        composable("cataDetail/{id}") {
+            CataDetailScreen(
+                viewModel = cataViewModel,
+                inscripcionViewModel = inscripcionViewModel,
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }

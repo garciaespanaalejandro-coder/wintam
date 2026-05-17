@@ -53,4 +53,15 @@ interface WintamApiService {
 
     @GET("api/cata/getAllCatas")
     suspend fun getAllCatas(): List<CataResponse>
+
+    //-------------------INSCRIPCIONES----------------------------------------------------------------------
+
+    @POST("api/inscripcion/joinCata/{id}")
+    suspend fun joinCata(@Path("id") id: Long): MessageResponse
+
+    @PATCH("api/inscripcion/cancelCata/{id}")
+    suspend fun cancelInscripcion(@Path("id") id: Long): MessageResponse
+
+    @PATCH("api/inscripcion/confirmAttendance")
+    suspend fun confirmAttendance (@Body request: ConfirmAttendanceRequest): MessageResponse
 }

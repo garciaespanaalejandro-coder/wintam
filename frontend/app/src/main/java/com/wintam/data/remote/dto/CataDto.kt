@@ -28,6 +28,11 @@ data class AttendanceCodeResponse(
     val generatedAt: String
 )
 
+data class ConfirmAttendanceRequest(
+    val cataId: Long,
+    val code: String
+)
+
 enum class CataStatus {
     OPEN, FULL, CANCELLED, COMPLETED
 }

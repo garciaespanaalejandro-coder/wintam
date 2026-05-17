@@ -23,7 +23,8 @@ class CataViewModel(private val repository: CataRepository): ViewModel(){
 
     private val _catas= MutableStateFlow<List<CataResponse>>(emptyList())
     val catas: StateFlow<List<CataResponse>> = _catas
-
+    private val _selectedCata = MutableStateFlow<CataResponse?>(null)
+    val selectedCata: StateFlow<CataResponse?> = _selectedCata
     fun loadCatas(){
         viewModelScope.launch {
             _uiState.value = CataUiState.Loading
@@ -54,5 +55,9 @@ class CataViewModel(private val repository: CataRepository): ViewModel(){
                 onFailure = { _uiState.value = CataUiState.Error(it.message ?: "Error desconocido") }
             )
         }
+    }
+
+    fun selectCata(id: Long) {
+        _selectedCata.value = _catas.value.find { it.id == id }
     }
 }
