@@ -29,10 +29,9 @@ data class AttendanceCodeResponse(
 )
 
 enum class CataStatus {
-    SCHEDULED, ACTIVE, CANCELLED, FINISHED
+    OPEN, FULL, CANCELLED, COMPLETED
 }
-
 enum class ExperienceLevel {
-    BEGINNER, INTERMEDIATE, ADVANCED
+    BEGINNER, INTERMEDIATE, EXPERT
 }
 

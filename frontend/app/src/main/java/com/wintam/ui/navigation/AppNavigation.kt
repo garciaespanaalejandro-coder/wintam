@@ -10,6 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.wintam.data.TokenManager
 import com.wintam.data.repository.AuthRepository
+import com.wintam.data.repository.CataRepository
+import com.wintam.ui.screens.FeedScreen
 import com.wintam.ui.screens.LoginScreen
 import com.wintam.ui.screens.RecoverPasswordScreen
 import com.wintam.ui.screens.RegisterScreen
@@ -18,6 +20,8 @@ import com.wintam.ui.screens.SplashScreen
 import com.wintam.ui.screens.VerifyEmailScreen
 import com.wintam.viewmodel.AuthViewModel
 import com.wintam.viewmodel.AuthViewModelFactory
+import com.wintam.viewmodel.CataViewModel
+import com.wintam.viewmodel.CataViewModelFactory
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -28,6 +32,11 @@ fun AppNavigation(){
     val repository= AuthRepository(tokenManager)
     val authViewModel: AuthViewModel= viewModel(
         factory = AuthViewModelFactory(repository)
+    )
+
+    val cataRepository= CataRepository(tokenManager)
+    val cataViewModel: CataViewModel= viewModel(
+        factory = CataViewModelFactory(cataRepository)
     )
 
     NavHost(
@@ -111,7 +120,21 @@ fun AppNavigation(){
         }
 
         composable("feed"){
-            //TODO: FeedScreen
+            FeedScreen(
+                viewModel=cataViewModel,
+                onNavigateToCataDetail = { id ->
+                    navController.navigate("cataDetail/$id")
+                },
+                onNavigateToProfile = {
+                    navController.navigate("profile")
+                },
+                onNavigateToMyCata = {
+                    navController.navigate("myCata")
+                },
+                onNavigateToCreateCata = {
+                    navController.navigate("createCata")
+                }
+            )
         }
     }
 }
