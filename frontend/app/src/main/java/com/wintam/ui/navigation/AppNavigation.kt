@@ -81,7 +81,7 @@ fun AppNavigation(){
             VerifyEmailScreen(
                 viewModel = authViewModel,
                 onVerifySuccess={
-                    navController.navigate("feed"){
+                    navController.navigate("login"){
                         popUpTo("verify") {inclusive = true}
                     }
                 }

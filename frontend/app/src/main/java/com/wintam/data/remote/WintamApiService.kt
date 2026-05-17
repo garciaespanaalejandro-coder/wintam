@@ -2,9 +2,15 @@ package com.wintam.data.remote
 
 import com.wintam.data.remote.dto.*
 import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface WintamApiService {
+
+    //--------------------FLUJO DE AUTENTICACIÓN----------------------------------------------------
 
     @POST("api/auth/register")
     suspend fun register(@Body request: RegisterRequest): MessageResponse
@@ -20,4 +26,31 @@ interface WintamApiService {
 
     @POST("api/auth/reset-password")
     suspend fun resetPassword(@Body request: ResetPasswordRequest): MessageResponse
+
+
+
+
+
+    //-------------------CATAS----------------------------------------------------------------------
+
+    @POST("/api/cata/createCata")
+    suspend fun createCata(@Body request: CreateCataRequest): MessageResponse
+
+    @GET("api/cata/searchCata")
+    suspend fun searchCata(
+        @Query("title") title: String? = null,
+        @Query("wineType") wineType: String? = null,
+        @Query("experienceLevel") experienceLevel: String? = null,
+        @Query("location") location: String? = null,
+        @Query("cataStatus") cataStatus: String? = null
+    ): List<CataResponse>
+
+    @PATCH("api/cata/cancel/{id}")
+    suspend fun cancelCata(@Path("id") id: Long): MessageResponse
+
+    @PATCH("api/cata/startCata/{id}")
+    suspend fun startCata(@Path("id") id: Long): AttendanceCodeResponse
+
+    @GET("api/cata/getAllCatas")
+    suspend fun getAllCatas(): List<CataResponse>
 }

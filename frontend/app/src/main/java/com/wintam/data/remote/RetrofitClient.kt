@@ -12,13 +12,30 @@ object RetrofitClient {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    private val client = OkHttpClient.Builder()
-        .addInterceptor(logging)
-        .build()
-
     val instance: Retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .client(client)
+        .client(
+            OkHttpClient.Builder()
+                .addInterceptor (logging)
+                .build()
+        )
         .addConverterFactory(GsonConverterFactory.create())
         .build()
+
+    fun authenticatedInstance(token: String): Retrofit{
+        val client= OkHttpClient.Builder()
+            .addInterceptor (logging)
+            .addInterceptor {chain ->
+                val request= chain.request().newBuilder()
+                    .addHeader("Authorization","Bearer $token")
+                    .build()
+                chain.proceed(request)
+            }.build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 }
