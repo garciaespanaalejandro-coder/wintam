@@ -104,14 +104,6 @@ fun FeedScreen(
                     fontSize = 28.sp,
                     color = TextPrimary
                 )
-                Spacer(modifier = Modifier.weight(1f))
-                IconButton(onClick = { onNavigateToMyCata() }) {
-                    Icon(
-                        imageVector = Icons.Filled.BookmarkBorder,
-                        contentDescription = "Mis catas",
-                        tint = Burgundy
-                    )
-                }
             }
         },
         bottomBar = {

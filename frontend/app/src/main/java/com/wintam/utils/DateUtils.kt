@@ -1,5 +1,6 @@
 package com.wintam.utils
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
 
@@ -10,4 +11,9 @@ fun formatDate(millis: Long): String {
         .atZone(java.time.ZoneId.systemDefault())
         .toLocalDate()
         .format(formatter)
+}
+
+@SuppressLint("DefaultLocale")
+fun formatTime(hour: Int, minute: Int): String {
+    return String.format("%02d:%02d:00", hour, minute)
 }

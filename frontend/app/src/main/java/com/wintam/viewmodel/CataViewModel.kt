@@ -3,6 +3,7 @@ package com.wintam.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wintam.data.remote.dto.CataResponse
+import com.wintam.data.remote.dto.CreateCataRequest
 import com.wintam.data.repository.CataRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,6 +39,15 @@ class CataViewModel(private val repository: CataRepository): ViewModel(){
         }
     }
 
+    fun createCata(request: CreateCataRequest){
+        viewModelScope.launch {
+            _uiState.value= CataUiState.Loading
+            repository.createCata(request).fold(
+                onSuccess = {_uiState.value= CataUiState.Success(it.message)},
+                onFailure = {_uiState.value= CataUiState.Error(it.message ?: "Error desconocido")}
+            )
+        }
+    }
     fun searchCata(
         title: String? = null,
         wineType: String? = null,
@@ -57,6 +67,9 @@ class CataViewModel(private val repository: CataRepository): ViewModel(){
         }
     }
 
+    fun resetState() {
+        _uiState.value = CataUiState.Idle
+    }
     fun selectCata(id: Long) {
         _selectedCata.value = _catas.value.find { it.id == id }
     }

@@ -13,6 +13,7 @@ import com.wintam.data.repository.AuthRepository
 import com.wintam.data.repository.CataRepository
 import com.wintam.data.repository.InscripcionRepository
 import com.wintam.ui.screens.CataDetailScreen
+import com.wintam.ui.screens.CreateCataScreen
 import com.wintam.ui.screens.FeedScreen
 import com.wintam.ui.screens.LoginScreen
 import com.wintam.ui.screens.RecoverPasswordScreen
@@ -152,6 +153,20 @@ fun AppNavigation(){
                 viewModel = cataViewModel,
                 inscripcionViewModel = inscripcionViewModel,
                 onNavigateBack = { navController.popBackStack() }
+            )
+        }
+
+        composable("createCata"){
+            CreateCataScreen(
+                viewModel = cataViewModel,
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                onCataCreated = {
+                    navController.navigate("feed") {
+                        popUpTo("createCata") { inclusive = true }
+                    }
+                }
             )
         }
     }

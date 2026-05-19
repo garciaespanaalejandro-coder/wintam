@@ -133,6 +133,7 @@ public class CataServiceSpring implements CataService{
         String code=getCode();
         cata.setAttendanceCode(code);
         cata.setCodeGeneratedAt(LocalDateTime.now());
+        cata.setStatus(CataStatus.ACTIVE);
         cataDAO.save(cata);
         return new AttendanceCodeResponse(code, cata.getCodeGeneratedAt());
 
