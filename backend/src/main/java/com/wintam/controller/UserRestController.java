@@ -1,11 +1,11 @@
 package com.wintam.controller;
 
+import com.wintam.dto.MessageResponse;
+import com.wintam.dto.UpdateProfileRequest;
 import com.wintam.dto.UserProfileResponse;
 import com.wintam.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/user")
@@ -19,5 +19,11 @@ public class UserRestController {
     @GetMapping("/getProfile")
     public ResponseEntity<UserProfileResponse> getProfile(){
         return ResponseEntity.ok(userService.getProfile());
+    }
+
+    @PatchMapping("/updateProfile")
+    public ResponseEntity<MessageResponse> updateProfile(@RequestBody UpdateProfileRequest request){
+        userService.updateProfile(request);
+        return ResponseEntity.ok(new MessageResponse("Perfil actualizado correctamente."));
     }
 }
