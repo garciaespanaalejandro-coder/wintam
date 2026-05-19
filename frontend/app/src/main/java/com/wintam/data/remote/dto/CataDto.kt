@@ -34,7 +34,7 @@ data class ConfirmAttendanceRequest(
 )
 
 enum class CataStatus {
-    OPEN, FULL, CANCELLED, COMPLETED
+    OPEN, FULL, CANCELLED, COMPLETED,ACTIVE
 }
 enum class ExperienceLevel {
     BEGINNER, INTERMEDIATE, EXPERT

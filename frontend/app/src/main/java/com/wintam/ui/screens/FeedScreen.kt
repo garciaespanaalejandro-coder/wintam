@@ -70,7 +70,6 @@ fun FeedScreen(
     onNavigateToCataDetail: (Long) -> Unit,
     onNavigateToCreateCata: () -> Unit,
     onNavigateToProfile: () -> Unit,
-    onNavigateToMyCata:() -> Unit
 ){
     val uiState by viewModel.uiState.collectAsState();
     val catas by viewModel.catas.collectAsState();

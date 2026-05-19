@@ -26,6 +26,9 @@ class CataViewModel(private val repository: CataRepository): ViewModel(){
     val catas: StateFlow<List<CataResponse>> = _catas
     private val _selectedCata = MutableStateFlow<CataResponse?>(null)
     val selectedCata: StateFlow<CataResponse?> = _selectedCata
+
+    private val _attendanceCode= MutableStateFlow<String?>(null)
+    val attendanceCode: StateFlow<String?> = _attendanceCode
     fun loadCatas(){
         viewModelScope.launch {
             _uiState.value = CataUiState.Loading
@@ -63,6 +66,19 @@ class CataViewModel(private val repository: CataRepository): ViewModel(){
                     _uiState.value = CataUiState.Idle
                 },
                 onFailure = { _uiState.value = CataUiState.Error(it.message ?: "Error desconocido") }
+            )
+        }
+    }
+
+    fun startCata(id: Long){
+        viewModelScope.launch {
+            _uiState.value= CataUiState.Loading
+            repository.startCata(id).fold(
+                onSuccess = {
+                    _attendanceCode.value=it.code
+                    _uiState.value= CataUiState.Idle
+                },
+                onFailure = {_uiState.value= CataUiState.Error(it.message?: "Error desconocido")}
             )
         }
     }

@@ -17,7 +17,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
@@ -27,9 +26,7 @@ import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.WineBar
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -62,7 +59,6 @@ import com.wintam.data.remote.dto.ConfirmAttendanceRequest
 import com.wintam.ui.theme.Border
 import com.wintam.ui.theme.Burgundy
 import com.wintam.ui.theme.BurgundyDark
-import com.wintam.ui.theme.BurgundySoft
 import com.wintam.ui.theme.Cream
 import com.wintam.ui.theme.DMSans
 import com.wintam.ui.theme.PlayfairDisplay
@@ -179,7 +175,7 @@ fun CataDetailScreen(
                         Text(if (yaInscrito) "Ya inscrito" else "Inscribirse")
                     }
 
-                    if(cata.cataStatus== CataStatus.OPEN){
+                    if(cata.cataStatus== CataStatus.ACTIVE){
                         Button(onClick = {showConfirmDialog=true}) {
                             Text("Confirmar asistencia")
                         }

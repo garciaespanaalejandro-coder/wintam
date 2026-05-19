@@ -20,6 +20,7 @@ import com.wintam.ui.screens.RecoverPasswordScreen
 import com.wintam.ui.screens.RegisterScreen
 import com.wintam.ui.screens.ResetPasswordScreen
 import com.wintam.ui.screens.SplashScreen
+import com.wintam.ui.screens.StartCataScreen
 import com.wintam.ui.screens.VerifyEmailScreen
 import com.wintam.viewmodel.AuthViewModel
 import com.wintam.viewmodel.AuthViewModelFactory
@@ -139,9 +140,6 @@ fun AppNavigation(){
                 onNavigateToProfile = {
                     navController.navigate("profile")
                 },
-                onNavigateToMyCata = {
-                    navController.navigate("myCata")
-                },
                 onNavigateToCreateCata = {
                     navController.navigate("createCata")
                 }
@@ -152,7 +150,12 @@ fun AppNavigation(){
             CataDetailScreen(
                 viewModel = cataViewModel,
                 inscripcionViewModel = inscripcionViewModel,
-                onNavigateBack = { navController.popBackStack() }
+                tokenManager= tokenManager,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToStartCata = { id->
+                    navController.navigate("startCata/$id")
+
+                }
             )
         }
 
@@ -167,6 +170,15 @@ fun AppNavigation(){
                         popUpTo("createCata") { inclusive = true }
                     }
                 }
+            )
+        }
+
+        composable("startCata/{id}"){
+            StartCataScreen(
+                viewModel = cataViewModel,
+                onNavigateBack ={
+                  navController.popBackStack()
+              }
             )
         }
     }
