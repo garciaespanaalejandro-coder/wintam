@@ -39,3 +39,19 @@ data class AuthResponse(
 data class MessageResponse(
     val message: String
 )
+
+data class UpdateProfileRequest(
+    val name: String? = null,
+    val surname: String? = null,
+    val username: String? = null,
+    val description: String? = null
+)
+
+data class UserProfileResponse(
+    val name: String,
+    val username: String,
+    val surname: String,
+    val email: String,
+    val description: String?,
+    val karma: Int
+)

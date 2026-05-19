@@ -54,6 +54,15 @@ interface WintamApiService {
     @GET("api/cata/getAllCatas")
     suspend fun getAllCatas(): List<CataResponse>
 
+
+
+    //-------------------USUARIOS----------------------------------------------------------------------
+
+    @PATCH("api/user/updateProfile")
+    suspend fun updateProfile(@Body request: UpdateProfileRequest): MessageResponse
+
+    @GET("api/user/getProfile")
+    suspend fun getProfile(): UserProfileResponse
     //-------------------INSCRIPCIONES----------------------------------------------------------------------
 
     @POST("api/inscripcion/joinCata/{id}")

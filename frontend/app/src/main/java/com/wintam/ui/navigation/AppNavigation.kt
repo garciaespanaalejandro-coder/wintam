@@ -12,10 +12,13 @@ import com.wintam.data.TokenManager
 import com.wintam.data.repository.AuthRepository
 import com.wintam.data.repository.CataRepository
 import com.wintam.data.repository.InscripcionRepository
+import com.wintam.data.repository.UserRepository
 import com.wintam.ui.screens.CataDetailScreen
 import com.wintam.ui.screens.CreateCataScreen
 import com.wintam.ui.screens.FeedScreen
 import com.wintam.ui.screens.LoginScreen
+import com.wintam.ui.screens.ProfileField
+import com.wintam.ui.screens.ProfileScreen
 import com.wintam.ui.screens.RecoverPasswordScreen
 import com.wintam.ui.screens.RegisterScreen
 import com.wintam.ui.screens.ResetPasswordScreen
@@ -28,6 +31,8 @@ import com.wintam.viewmodel.CataViewModel
 import com.wintam.viewmodel.CataViewModelFactory
 import com.wintam.viewmodel.InscripcionViewModel
 import com.wintam.viewmodel.InscripcionViewModelFactory
+import com.wintam.viewmodel.UserViewModel
+import com.wintam.viewmodel.UserViewModelFactory
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -48,6 +53,11 @@ fun AppNavigation(){
     val inscripcionRepository = InscripcionRepository(tokenManager)
     val inscripcionViewModel: InscripcionViewModel = viewModel(
         factory = InscripcionViewModelFactory(inscripcionRepository)
+    )
+
+    val userRepository = UserRepository(tokenManager)
+    val userViewModel: UserViewModel = viewModel(
+        factory = UserViewModelFactory(userRepository)
     )
 
     NavHost(
@@ -181,5 +191,21 @@ fun AppNavigation(){
               }
             )
         }
+
+        composable("profile"){
+            ProfileScreen(
+                viewModel = userViewModel,
+                onNavigateToFeed = {
+                    navController.navigate("feed"){
+                        popUpTo("profile") {inclusive= true}
+                    }
+                },
+                onNavigateToCreateCata = {
+                    navController.navigate("createCata")
+                }
+            )
+        }
+
+
     }
 }
