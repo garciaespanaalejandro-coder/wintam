@@ -53,6 +53,7 @@ public class ReportServiceSpirng implements ReportService{
 
         for (Report report : reportList) {
             ReportProfileResponse response= new ReportProfileResponse(
+                    report.getId(),
                     report.getReporter().getUsername(),
                     report.getReported().getUsername(),
                     report.getReason(),
