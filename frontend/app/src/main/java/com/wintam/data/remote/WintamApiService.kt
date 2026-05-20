@@ -63,6 +63,8 @@ interface WintamApiService {
 
     @GET("api/user/getProfile")
     suspend fun getProfile(): UserProfileResponse
+
+
     //-------------------INSCRIPCIONES----------------------------------------------------------------------
 
     @POST("api/inscripcion/joinCata/{id}")
@@ -73,4 +75,18 @@ interface WintamApiService {
 
     @PATCH("api/inscripcion/confirmAttendance")
     suspend fun confirmAttendance (@Body request: ConfirmAttendanceRequest): MessageResponse
+
+    //-------------------REPORTES----------------------------------------------------------------------
+
+    @POST("api/report/reportUser")
+    suspend fun reportUser(@Body request: ReportRequest): MessageResponse
+
+    @GET("api/report/getReport")
+    suspend fun getReport(): List<ReportProfileResponse>
+
+    @PATCH("api/report/resolveReport")
+    suspend fun resolveReport(@Body request: ResolveReportRequest): MessageResponse
+
+    @PATCH("api/report/dismissReport/{id}")
+    suspend fun dismissReport(@Path("id") id: Long): MessageResponse
 }
