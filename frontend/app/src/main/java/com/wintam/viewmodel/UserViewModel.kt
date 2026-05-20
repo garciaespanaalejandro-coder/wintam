@@ -2,11 +2,14 @@ package com.wintam.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wintam.data.TokenManager
 import com.wintam.data.remote.dto.UpdateProfileRequest
 import com.wintam.data.remote.dto.UserProfileResponse
 import com.wintam.data.repository.UserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 sealed class UserUiState {
@@ -16,10 +19,14 @@ sealed class UserUiState {
     data class Error(val message: String) : UserUiState()
 }
 
-class UserViewModel(private val repository: UserRepository) : ViewModel() {
+class UserViewModel(private val repository: UserRepository, tokenManager: TokenManager) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UserUiState>(UserUiState.Idle)
     val uiState: StateFlow<UserUiState> = _uiState
+
+    val role: StateFlow<String?> = tokenManager.role
+        .stateIn(viewModelScope, SharingStarted.Eagerly,null)
+
 
     private val _profile = MutableStateFlow<UserProfileResponse?>(null)
     val profile: StateFlow<UserProfileResponse?> = _profile

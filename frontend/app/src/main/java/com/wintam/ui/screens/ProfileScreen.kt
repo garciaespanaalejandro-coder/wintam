@@ -19,6 +19,8 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -59,11 +61,13 @@ import com.wintam.viewmodel.UserViewModel
 fun ProfileScreen(
     viewModel: UserViewModel,
     onNavigateToFeed: () -> Unit,
-    onNavigateToCreateCata: () -> Unit
+    onNavigateToCreateCata: () -> Unit,
+    onNavigateToAdmin: () -> Unit
 ){
     val uiState by viewModel.uiState.collectAsState()
     val profile by viewModel.profile.collectAsState()
     var editMode by remember { mutableStateOf(false) }
+    val role by viewModel.role.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     var name by remember { mutableStateOf("") }
@@ -116,6 +120,7 @@ fun ProfileScreen(
                                     description = description
                                 )
                             )
+                            editMode=false
                         } else {
                             editMode = true
                         }
@@ -193,6 +198,17 @@ fun ProfileScreen(
                     InfoRow(Icons.Default.AlternateEmail, "USERNAME", "@${it.username}")
                     InfoRow(Icons.Default.Email, "EMAIL", it.email)
                     InfoRow(Icons.Default.Info, "DESCRIPCIÓN", it.description ?: "Sin descripción")
+                }
+
+                if (role=="ADMIN"){
+                    Button(
+                        onClick = { onNavigateToAdmin() },
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Burgundy)
+                    ) {
+                        Text("Panel de administración", color = Cream, fontFamily = DMSans)
+                    }
                 }
             }
         }
