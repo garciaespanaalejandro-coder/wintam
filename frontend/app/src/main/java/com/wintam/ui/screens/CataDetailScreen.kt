@@ -1,6 +1,7 @@
 package com.wintam.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.WineBar
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +35,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -56,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import com.wintam.data.TokenManager
 import com.wintam.data.remote.dto.CataStatus
 import com.wintam.data.remote.dto.ConfirmAttendanceRequest
+import com.wintam.data.remote.dto.ReportRequest
 import com.wintam.ui.theme.Border
 import com.wintam.ui.theme.Burgundy
 import com.wintam.ui.theme.BurgundyDark
@@ -67,10 +71,12 @@ import com.wintam.ui.theme.TextSecondary
 import com.wintam.viewmodel.CataViewModel
 import com.wintam.viewmodel.InscripcionUiState
 import com.wintam.viewmodel.InscripcionViewModel
+import com.wintam.viewmodel.ReportViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CataDetailScreen(
+    reportViewModel: ReportViewModel,
     viewModel: CataViewModel,
     inscripcionViewModel: InscripcionViewModel,
     tokenManager: TokenManager,
@@ -83,7 +89,15 @@ fun CataDetailScreen(
     val username by tokenManager.username.collectAsState(initial = "")
     val cata by viewModel.selectedCata.collectAsState()
     var showConfirmDialog by remember { mutableStateOf(false) }
+    val attendees by inscripcionViewModel.attendees.collectAsState()
+    var showReportDialog by remember { mutableStateOf(false) }
+    var selectedUsername by remember { mutableStateOf("") }
+    var reportReason by remember { mutableStateOf("") }
 
+    LaunchedEffect(Unit) {
+        val cataId = viewModel.selectedCata.value?.id ?: return@LaunchedEffect
+        inscripcionViewModel.loadAttendees(cataId)
+    }
     LaunchedEffect(inscripcionUiState) {
         when (inscripcionUiState) {
             is InscripcionUiState.Success -> {
@@ -211,6 +225,86 @@ fun CataDetailScreen(
                         )
                     }
                 }
+                Text(
+                    "ASISTENTES",
+                    fontFamily = DMSans,
+                    fontSize = 11.sp,
+                    color = TextSecondary,
+                    modifier = Modifier.padding(start = 16.dp)
+                )
+                attendees.forEach { username->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "@$username",
+                            fontFamily = DMSans,
+                            fontSize = 14.sp,
+                            color = TextPrimary
+                        )
+                        TextButton( onClick = {
+                            selectedUsername = username
+                            showReportDialog = true
+                        }) {
+                            Text("Reportar", color = Burgundy, fontFamily = DMSans, fontSize = 12.sp)
+                        }
+                    }
+                }
+            }
+            if(showReportDialog){
+                AlertDialog(
+                    onDismissRequest = {
+                        showReportDialog= false
+                        reportReason= ""
+                    },
+                    title = { Text("Reportar a @$selectedUsername", fontFamily = DMSans) },
+                    text={
+                        OutlinedTextField(
+                            value = reportReason,
+                            onValueChange = {reportReason = it},
+                            label = {Text("Motivo", fontFamily = DMSans)},
+                            modifier = Modifier.fillMaxWidth(),
+                            shape= RoundedCornerShape(12.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = Burgundy,
+                                unfocusedBorderColor = Border,
+                                focusedLabelColor = Burgundy,
+                                unfocusedLabelColor = TextSecondary,
+                                cursorColor = Burgundy,
+                                focusedTextColor = TextPrimary,
+                                unfocusedTextColor = TextPrimary
+                            )
+                        )
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = {
+                                reportViewModel.reportUser(
+                                    ReportRequest(
+                                        username = selectedUsername,
+                                        reason = reportReason
+                                    )
+                                )
+                                showReportDialog= false
+                                reportReason= ""
+                            },
+                            colors= ButtonDefaults.buttonColors(containerColor = Burgundy)
+                        ) {
+                            Text("Enviar", color= Cream, fontFamily = DMSans)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = {
+                            showReportDialog = false
+                            reportReason = ""
+                        }
+                        ) {
+                            Text("Cancelar", color = TextSecondary, fontFamily = DMSans)
+                        }
+                    }
+                )
             }
         }
     }

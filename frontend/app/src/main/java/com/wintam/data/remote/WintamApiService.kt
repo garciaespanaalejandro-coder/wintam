@@ -76,6 +76,9 @@ interface WintamApiService {
     @PATCH("api/inscripcion/confirmAttendance")
     suspend fun confirmAttendance (@Body request: ConfirmAttendanceRequest): MessageResponse
 
+    @GET("api/inscripcion/getAttendees/{cataId}")
+    suspend fun getAttendees(@Path("cataId") cataId: Long): List<String>
+
     //-------------------REPORTES----------------------------------------------------------------------
 
     @POST("api/report/reportUser")

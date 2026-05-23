@@ -18,7 +18,8 @@ sealed class InscripcionUiState{
 class InscripcionViewModel (private val repository: InscripcionRepository): ViewModel(){
     private val _uiState = MutableStateFlow<InscripcionUiState>(InscripcionUiState.Idle)
     val uiState: StateFlow<InscripcionUiState> = _uiState
-
+    private val _attendees= MutableStateFlow<List<String>>(emptyList())
+    val attendees: StateFlow<List<String>> = _attendees
     fun joinCata(id: Long){
         viewModelScope.launch {
             _uiState.value= InscripcionUiState.Loading
@@ -48,6 +49,16 @@ class InscripcionViewModel (private val repository: InscripcionRepository): View
             )
         }
     }
+
+    fun loadAttendees(cataId: Long) {
+        viewModelScope.launch {
+            repository.getAttendees(cataId).fold(
+                onSuccess = { _attendees.value = it },
+                onFailure = { }
+            )
+        }
+    }
+
 
     fun resetState() {
         _uiState.value = InscripcionUiState.Idle

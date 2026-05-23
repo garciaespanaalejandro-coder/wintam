@@ -38,4 +38,12 @@ class InscripcionRepository (private val tokenManager: TokenManager){
             Result.failure(e)
         }
     }
+
+    suspend fun getAttendees(id: Long): Result<List<String>>{
+        return try {
+            Result.success(api().getAttendees(id))
+        }catch (e: Exception){
+            Result.failure(e)
+        }
+    }
 }

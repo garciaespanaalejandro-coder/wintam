@@ -169,6 +169,7 @@ fun AppNavigation(){
 
         composable("cataDetail/{id}") {
             CataDetailScreen(
+                reportViewModel= reportViewModel,
                 viewModel = cataViewModel,
                 inscripcionViewModel = inscripcionViewModel,
                 tokenManager= tokenManager,
@@ -179,7 +180,6 @@ fun AppNavigation(){
                     navController.navigate("createCata"){
                         popUpTo("startCata/$id") { inclusive = true }
                     }
-
                 }
             )
         }
