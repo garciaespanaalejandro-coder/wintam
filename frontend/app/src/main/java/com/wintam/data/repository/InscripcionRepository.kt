@@ -5,6 +5,7 @@ import com.wintam.data.remote.RetrofitClient
 import com.wintam.data.remote.WintamApiService
 import com.wintam.data.remote.dto.ConfirmAttendanceRequest
 import com.wintam.data.remote.dto.MessageResponse
+import com.wintam.utils.safeApiCall
 import kotlinx.coroutines.flow.first
 
 class InscripcionRepository (private val tokenManager: TokenManager){
@@ -16,34 +17,18 @@ class InscripcionRepository (private val tokenManager: TokenManager){
     }
 
     suspend fun joinCata(id: Long): Result<MessageResponse>{
-        return try {
-            Result.success(api().joinCata(id))
-        }catch (e: Exception){
-            Result.failure(e)
-        }
+        return safeApiCall { api().joinCata(id) }
     }
 
     suspend fun cancelCata(id: Long): Result<MessageResponse>{
-        return try{
-            Result.success(api().cancelCata(id))
-        }catch (e: Exception){
-            Result.failure(e)
-        }
+        return safeApiCall { api().cancelCata(id) }
     }
 
     suspend fun confirmAttendance(request: ConfirmAttendanceRequest): Result<MessageResponse>{
-        return try {
-            Result.success(api().confirmAttendance(request))
-        }catch (e: Exception){
-            Result.failure(e)
-        }
+        return safeApiCall { api().confirmAttendance(request) }
     }
 
     suspend fun getAttendees(id: Long): Result<List<String>>{
-        return try {
-            Result.success(api().getAttendees(id))
-        }catch (e: Exception){
-            Result.failure(e)
-        }
+        return safeApiCall { api().getAttendees(id) }
     }
 }

@@ -6,6 +6,7 @@ import com.wintam.data.remote.WintamApiService
 import com.wintam.data.remote.dto.MessageResponse
 import com.wintam.data.remote.dto.UpdateProfileRequest
 import com.wintam.data.remote.dto.UserProfileResponse
+import com.wintam.utils.safeApiCall
 import kotlinx.coroutines.flow.first
 
 class UserRepository(private val tokenManager: TokenManager) {
@@ -17,18 +18,10 @@ class UserRepository(private val tokenManager: TokenManager) {
     }
 
     suspend fun getProfile(): Result<UserProfileResponse> {
-        return try {
-            Result.success(api().getProfile())
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return safeApiCall { api().getProfile() }
     }
 
     suspend fun updateProfile(request: UpdateProfileRequest): Result<MessageResponse> {
-        return try {
-            Result.success(api().updateProfile(request))
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        return safeApiCall { api().updateProfile(request) }
     }
 }
