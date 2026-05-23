@@ -60,6 +60,7 @@ import com.wintam.data.TokenManager
 import com.wintam.data.remote.dto.CataStatus
 import com.wintam.data.remote.dto.ConfirmAttendanceRequest
 import com.wintam.data.remote.dto.ReportRequest
+import com.wintam.ui.screens.dialogs.ReportDialog
 import com.wintam.ui.theme.Border
 import com.wintam.ui.theme.Burgundy
 import com.wintam.ui.theme.BurgundyDark
@@ -254,56 +255,13 @@ fun CataDetailScreen(
                 }
             }
             if(showReportDialog){
-                AlertDialog(
-                    onDismissRequest = {
-                        showReportDialog= false
-                        reportReason= ""
+                ReportDialog(
+                    username= selectedUsername,
+                    onConfirm = { reason ->
+                        reportViewModel.reportUser(ReportRequest(selectedUsername, reason))
+                        showConfirmDialog = false
                     },
-                    title = { Text("Reportar a @$selectedUsername", fontFamily = DMSans) },
-                    text={
-                        OutlinedTextField(
-                            value = reportReason,
-                            onValueChange = {reportReason = it},
-                            label = {Text("Motivo", fontFamily = DMSans)},
-                            modifier = Modifier.fillMaxWidth(),
-                            shape= RoundedCornerShape(12.dp),
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = Burgundy,
-                                unfocusedBorderColor = Border,
-                                focusedLabelColor = Burgundy,
-                                unfocusedLabelColor = TextSecondary,
-                                cursorColor = Burgundy,
-                                focusedTextColor = TextPrimary,
-                                unfocusedTextColor = TextPrimary
-                            )
-                        )
-                    },
-                    confirmButton = {
-                        Button(
-                            onClick = {
-                                reportViewModel.reportUser(
-                                    ReportRequest(
-                                        username = selectedUsername,
-                                        reason = reportReason
-                                    )
-                                )
-                                showReportDialog= false
-                                reportReason= ""
-                            },
-                            colors= ButtonDefaults.buttonColors(containerColor = Burgundy)
-                        ) {
-                            Text("Enviar", color= Cream, fontFamily = DMSans)
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = {
-                            showReportDialog = false
-                            reportReason = ""
-                        }
-                        ) {
-                            Text("Cancelar", color = TextSecondary, fontFamily = DMSans)
-                        }
-                    }
+                    onDismiss = {showConfirmDialog=false}
                 )
             }
         }

@@ -53,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wintam.data.remote.dto.CreateCataRequest
 import com.wintam.data.remote.dto.ExperienceLevel
+import com.wintam.ui.dialogs.WintamDatePickerDialog
+import com.wintam.ui.screens.dialogs.TimePickerDialog
 import com.wintam.ui.theme.Border
 import com.wintam.ui.theme.Burgundy
 import com.wintam.ui.theme.BurgundySoft
@@ -231,22 +233,11 @@ fun CreateCataScreen(
             )
 
             if (showDatePicker) {
-                DatePickerDialog(
-                    onDismissRequest = { showDatePicker = false },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            datePickerState.selectedDateMillis?.let {
-                                scheduleDate = formatDate(it)
-                            }
-                            showDatePicker = false
-                        }) { Text("Aceptar", color = Burgundy) }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { showDatePicker = false }) {
-                            Text("Cancelar", color = TextPrimary)
-                        }
-                    }
-                ) { DatePicker(state = datePickerState) }
+                WintamDatePickerDialog(
+                    datePickerState=datePickerState,
+                    onConfirm = {millis ->scheduleDate = formatDate(millis)},
+                    onDismiss = {showDatePicker= false}
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -274,20 +265,10 @@ fun CreateCataScreen(
                 )
             )
             if (showTimePicker) {
-                AlertDialog(
-                    onDismissRequest = { showTimePicker = false },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            scheduledTime = formatTime(timePickerState.hour, timePickerState.minute)
-                            showTimePicker = false
-                        }) { Text("Aceptar", color = Burgundy) }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { showTimePicker = false }) {
-                            Text("Cancelar", color = TextSecondary)
-                        }
-                    },
-                    text = { TimePicker(state = timePickerState) }
+                TimePickerDialog(
+                    timePickerState= timePickerState,
+                    onConfirm = {hour, minute -> scheduledTime= formatTime(hour, minute)},
+                    onDismiss = {showTimePicker=false}
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
