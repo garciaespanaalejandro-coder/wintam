@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +26,20 @@ public class IncripcionServiceSpring implements InscripcionService{
         this.karma = karma;
     }
 
+
+    @Override
+    public List<String> getAttendees(Long id) {
+        Cata cata = cataDAO.findById(id)
+                .orElseThrow(() -> new CataNotFoundException(id));
+
+        List<Inscripcion> inscripcionList= inscripcionDAO.findByCata(cata);
+        List<String> responseList = new ArrayList<>();
+
+        for (Inscripcion inscripcion : inscripcionList) {
+            responseList.add(inscripcion.getPlayer().getUsername());
+        }
+        return responseList;
+    }
 
     @Transactional
     @Override

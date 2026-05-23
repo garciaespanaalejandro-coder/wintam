@@ -12,7 +12,9 @@ import com.wintam.data.TokenManager
 import com.wintam.data.repository.AuthRepository
 import com.wintam.data.repository.CataRepository
 import com.wintam.data.repository.InscripcionRepository
+import com.wintam.data.repository.ReportRepository
 import com.wintam.data.repository.UserRepository
+import com.wintam.ui.screens.AdminScren
 import com.wintam.ui.screens.CataDetailScreen
 import com.wintam.ui.screens.CreateCataScreen
 import com.wintam.ui.screens.FeedScreen
@@ -31,6 +33,8 @@ import com.wintam.viewmodel.CataViewModel
 import com.wintam.viewmodel.CataViewModelFactory
 import com.wintam.viewmodel.InscripcionViewModel
 import com.wintam.viewmodel.InscripcionViewModelFactory
+import com.wintam.viewmodel.ReportViewModel
+import com.wintam.viewmodel.ReportViewModelFactory
 import com.wintam.viewmodel.UserViewModel
 import com.wintam.viewmodel.UserViewModelFactory
 
@@ -57,8 +61,15 @@ fun AppNavigation(){
 
     val userRepository = UserRepository(tokenManager)
     val userViewModel: UserViewModel = viewModel(
-        factory = UserViewModelFactory(userRepository)
+        factory = UserViewModelFactory(userRepository, tokenManager)
     )
+
+    val reportRepository= ReportRepository(tokenManager)
+    val reportViewModel: ReportViewModel= viewModel(
+        factory = ReportViewModelFactory(reportRepository)
+    )
+
+
 
     NavHost(
         navController= navController,
@@ -161,9 +172,13 @@ fun AppNavigation(){
                 viewModel = cataViewModel,
                 inscripcionViewModel = inscripcionViewModel,
                 tokenManager= tokenManager,
-                onNavigateBack = { navController.popBackStack() },
+                onNavigateBack = {
+                    navController.navigate("feed")
+                },
                 onNavigateToStartCata = { id->
-                    navController.navigate("startCata/$id")
+                    navController.navigate("createCata"){
+                        popUpTo("startCata/$id") { inclusive = true }
+                    }
 
                 }
             )
@@ -173,7 +188,7 @@ fun AppNavigation(){
             CreateCataScreen(
                 viewModel = cataViewModel,
                 onNavigateBack = {
-                    navController.popBackStack()
+                    navController.navigate("feed")
                 },
                 onCataCreated = {
                     navController.navigate("feed") {
@@ -202,6 +217,18 @@ fun AppNavigation(){
                 },
                 onNavigateToCreateCata = {
                     navController.navigate("createCata")
+                },
+                onNavigateToAdmin={
+                    navController.navigate("adminScreen")
+                }
+            )
+        }
+
+        composable("adminScreen"){
+            AdminScren(
+                viewModel = reportViewModel,
+                onNavigateBack = {
+                    navController.navigate("profile")
                 }
             )
         }

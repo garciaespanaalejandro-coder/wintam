@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/inscripcion")
 public class InscripcionRestController {
@@ -30,6 +32,11 @@ public class InscripcionRestController {
     @PatchMapping("/confirmAttendance")
     public ResponseEntity<MessageResponse> confirmAttendance(@Valid @RequestBody ConfirmAttendanceRequest request){
         return ResponseEntity.status(HttpStatus.OK).body(inscripcionService.confirmAttendance(request));
+    }
+
+    @GetMapping("/getAttendees/{cataId}")
+    public ResponseEntity<List<String>> getAttendees(@PathVariable Long cataId){
+        return ResponseEntity.ok(inscripcionService.getAttendees(cataId));
     }
 
 }

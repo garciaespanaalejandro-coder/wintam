@@ -52,7 +52,6 @@ public class CataServiceSpring implements CataService{
         cataDAO.save(cata1);
         return new MessageResponse("Cata creada correctamente.");
     }
-
     @Override
     public List<CataResponse> searchCatas(SearchCatasRequest request) {
         List<CataResponse> catas= new ArrayList<>();
@@ -61,9 +60,9 @@ public class CataServiceSpring implements CataService{
         StringBuilder jpql = new StringBuilder("SELECT c FROM Cata c WHERE 1=1 ");
 
         // APLICAR FILTROS DINÁMICOS
-        if(request.getTitle()!= null && !request.getTitle().trim().isEmpty()){
-            jpql.append("AND c.title = :title ");
-            parametros.put("title",request.getTitle());
+        if(request.getTitle() != null && !request.getTitle().trim().isEmpty()){
+            jpql.append("AND LOWER(c.title) LIKE LOWER(:title) ");
+            parametros.put("title", "%" + request.getTitle() + "%");
         }
         if(request.getWineType()!= null && !request.getWineType().trim().isEmpty()){
             jpql.append("AND c.wineType = :wineType ");
@@ -94,6 +93,7 @@ public class CataServiceSpring implements CataService{
         }
         return catas;
     }
+
 
     @Transactional
     @Override
