@@ -47,7 +47,7 @@ import com.wintam.viewmodel.ReportUiState
 import com.wintam.viewmodel.ReportViewModel
 
 @Composable
-fun AdminScren(
+fun AdminScreen(
     viewModel: ReportViewModel,
     onNavigateBack: () -> Unit
 ){
@@ -62,9 +62,10 @@ fun AdminScren(
     LaunchedEffect(uiState) {
         when (uiState) {
             is ReportUiState.Success -> {
-                snackbarHostState.showSnackbar((uiState as ReportUiState.Success).message ?: "Hecho")
-                viewModel.loadReport()
+                val msg=(uiState as ReportUiState.Success).message ?:"Acción realizada correctamente"
                 viewModel.resetState()
+                viewModel.loadReport()
+                snackbarHostState.showSnackbar(msg)
             }
             is ReportUiState.Error -> {
                 snackbarHostState.showSnackbar((uiState as ReportUiState.Error).message)

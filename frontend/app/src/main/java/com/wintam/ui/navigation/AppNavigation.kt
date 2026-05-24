@@ -14,7 +14,7 @@ import com.wintam.data.repository.CataRepository
 import com.wintam.data.repository.InscripcionRepository
 import com.wintam.data.repository.ReportRepository
 import com.wintam.data.repository.UserRepository
-import com.wintam.ui.screens.AdminScren
+import com.wintam.ui.screens.AdminScreen
 import com.wintam.ui.screens.CataDetailScreen
 import com.wintam.ui.screens.CreateCataScreen
 import com.wintam.ui.screens.FeedScreen
@@ -221,7 +221,7 @@ fun AppNavigation(){
         }
 
         composable("adminScreen"){
-            AdminScren(
+            AdminScreen(
                 viewModel = reportViewModel,
                 onNavigateBack = {
                     navController.navigate("profile")
