@@ -15,10 +15,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.FilterList
 import androidx.compose.material.icons.filled.Home
@@ -34,8 +33,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -47,13 +44,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wintam.R
-import com.wintam.ui.theme.Border
+import com.wintam.ui.components.WintamTextField
 import com.wintam.ui.theme.Burgundy
 import com.wintam.ui.theme.BurgundySoft
 import com.wintam.ui.theme.Cream
@@ -131,31 +126,32 @@ fun FeedScreen(
         Column(
             modifier = Modifier.padding(paddingValues)
         ) {
-            OutlinedTextField(
-                value= searchQuery,
-                onValueChange = {searchQuery= it},
-                label= {
-                    Text("Buscar por título", fontFamily = DMSans, fontSize = 14.sp)
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                modifier = Modifier.fillMaxWidth(),
-                shape= RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                ),
-                trailingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = null,
-                        tint = TextSecondary
+            WintamTextField(
+                value = searchQuery,
+                onValueChange = {searchQuery = it},
+                label = "Buscar por título",
+                keyboardActions = KeyboardActions ( onSearch = {
+                    viewModel.searchCata(
+                        wineType = selectedWineType,
+                        title = searchQuery,
+                        location = selectedLocation,
+                        experienceLevel = selectedLevel
                     )
+                    showFilters = false
+                }),
+                trailingIcon = {
+                    IconButton(onClick = {
+                        viewModel.searchCata(
+                            wineType = selectedWineType,
+                            title = searchQuery,
+                            cataStatus = selectedStatus,
+                            location = selectedLocation,
+                            experienceLevel = selectedLevel
+                        )
+                        showFilters = false
+                    }) {
+                        Icon(Icons.Default.Search, contentDescription = null, tint = TextSecondary)
+                    }
                 }
             )
 
@@ -172,73 +168,22 @@ fun FeedScreen(
 
             if (showFilters){
                 Column (modifier = Modifier.padding(horizontal = 16.dp)) {
-                    OutlinedTextField(
+                    WintamTextField(
                         value = selectedWineType ?: "",
                         onValueChange = { selectedWineType = it.ifBlank { null } },
-                        label = { Text("Tipo de vino", fontFamily = DMSans, fontSize = 14.sp) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Burgundy,
-                            unfocusedBorderColor = Border,
-                            focusedLabelColor = Burgundy,
-                            unfocusedLabelColor = TextSecondary,
-                            cursorColor = Burgundy,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
-                        )
+                        label = "Tipo de vino"
                     )
-                    OutlinedTextField(
+
+                    WintamTextField(
                         value = selectedLevel ?: "",
                         onValueChange = { selectedLevel = it.ifBlank { null } },
-                        label = { Text("Nivel", fontFamily = DMSans, fontSize = 14.sp) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Burgundy,
-                            unfocusedBorderColor = Border,
-                            focusedLabelColor = Burgundy,
-                            unfocusedLabelColor = TextSecondary,
-                            cursorColor = Burgundy,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
-                        )
+                        label = "Nivel"
                     )
-                    OutlinedTextField(
+
+                    WintamTextField(
                         value = selectedLocation ?: "",
                         onValueChange = { selectedLocation = it.ifBlank { null } },
-                        label = { Text("Localización", fontFamily = DMSans, fontSize = 14.sp) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Burgundy,
-                            unfocusedBorderColor = Border,
-                            focusedLabelColor = Burgundy,
-                            unfocusedLabelColor = TextSecondary,
-                            cursorColor = Burgundy,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
-                        )
-                    )
-                    OutlinedTextField(
-                        value = selectedStatus ?: "",
-                        onValueChange = { selectedStatus = it.ifBlank { null } },
-                        label = { Text("Status", fontFamily = DMSans, fontSize = 14.sp) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Burgundy,
-                            unfocusedBorderColor = Border,
-                            focusedLabelColor = Burgundy,
-                            unfocusedLabelColor = TextSecondary,
-                            cursorColor = Burgundy,
-                            focusedTextColor = TextPrimary,
-                            unfocusedTextColor = TextPrimary
-                        )
+                        label = "Localización"
                     )
                     Button(
                         onClick = {

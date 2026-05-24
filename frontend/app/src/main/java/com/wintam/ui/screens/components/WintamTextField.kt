@@ -2,6 +2,7 @@ package com.wintam.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -28,7 +29,8 @@ fun WintamTextField(
     singleLine: Boolean = true,
     readOnly: Boolean = false,
     trailingIcon: @Composable (() -> Unit)? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardActions: KeyboardActions= KeyboardActions.Default
 ) {
     OutlinedTextField(
         value = value,
@@ -37,6 +39,7 @@ fun WintamTextField(
         singleLine = singleLine,
         readOnly = readOnly,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        keyboardActions= keyboardActions,
         visualTransformation = visualTransformation,
         trailingIcon = trailingIcon,
         modifier = modifier.fillMaxWidth(),
