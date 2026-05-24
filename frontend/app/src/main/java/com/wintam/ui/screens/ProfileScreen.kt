@@ -47,6 +47,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.wintam.ui.screens.components.InfoRow
+import com.wintam.ui.screens.components.ProfileField
 import com.wintam.ui.theme.Border
 import com.wintam.ui.theme.Burgundy
 import com.wintam.ui.theme.Cream
@@ -187,15 +189,14 @@ fun ProfileScreen(
                     fontSize = 14.sp,
                     color = TextSecondary
                 )
+                InfoRow(Icons.Default.AlternateEmail, "USUARIO", "@${it.username}")
 
                 if (editMode) {
                     ProfileField("Nombre", name) { name = it }
                     ProfileField("Apellido", surname) { surname = it }
-                    ProfileField("Username", username) { username = it }
                     ProfileField("Descripción", description, singleLine = false) { description = it }
                 } else {
                     InfoRow(Icons.Default.Person, "NOMBRE", "${it.name} ${it.surname}")
-                    InfoRow(Icons.Default.AlternateEmail, "USERNAME", "@${it.username}")
                     InfoRow(Icons.Default.Email, "EMAIL", it.email)
                     InfoRow(Icons.Default.Info, "DESCRIPCIÓN", it.description ?: "Sin descripción")
                 }
@@ -217,28 +218,3 @@ fun ProfileScreen(
 
 }
 
-@Composable
-fun ProfileField(
-    label: String,
-    value: String,
-    singleLine: Boolean = true,
-    onValueChange: (String) -> Unit
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label, fontFamily = DMSans, fontSize = 14.sp) },
-        singleLine = singleLine,
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Burgundy,
-            unfocusedBorderColor = Border,
-            focusedLabelColor = Burgundy,
-            unfocusedLabelColor = TextSecondary,
-            cursorColor = Burgundy,
-            focusedTextColor = TextPrimary,
-            unfocusedTextColor = TextPrimary
-        )
-    )
-}

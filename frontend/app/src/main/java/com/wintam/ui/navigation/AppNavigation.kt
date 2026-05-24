@@ -19,7 +19,6 @@ import com.wintam.ui.screens.CataDetailScreen
 import com.wintam.ui.screens.CreateCataScreen
 import com.wintam.ui.screens.FeedScreen
 import com.wintam.ui.screens.LoginScreen
-import com.wintam.ui.screens.ProfileField
 import com.wintam.ui.screens.ProfileScreen
 import com.wintam.ui.screens.RecoverPasswordScreen
 import com.wintam.ui.screens.RegisterScreen
