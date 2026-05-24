@@ -16,8 +16,12 @@ class InscripcionRepository (private val tokenManager: TokenManager){
             .create(WintamApiService::class.java)
     }
 
-    suspend fun joinCata(id: Long): Result<MessageResponse>{
-        return safeApiCall { api().joinCata(id) }
+    suspend fun joinCata(id: Long): Result<MessageResponse> {
+        return safeApiCall(
+            errorMessages = mapOf(
+                409 to "Ya estás inscrito en esta cata"
+            )
+        ) { api().joinCata(id) }
     }
 
     suspend fun cancelCata(id: Long): Result<MessageResponse>{

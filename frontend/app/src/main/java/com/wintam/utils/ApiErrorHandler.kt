@@ -6,7 +6,7 @@ import retrofit2.HttpException
 
 private val traducciones = mapOf(
     "Bad credentials" to "Email o contraseña incorrectos",
-    "El usuario no existe. " to "Email o contraseña incorrectos", // mismo mensaje por seguridad
+    "El usuario no existe. " to "Email o contraseña incorrectos",
     "User is disabled" to "Tu cuenta ha sido deshabilitada",
     "must be a well-formed email address" to "El email no tiene un formato válido",
     "must not be blank" to "Este campo es obligatorio",

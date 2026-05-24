@@ -64,6 +64,7 @@ import com.wintam.ui.theme.TextSecondary
 import com.wintam.viewmodel.CataViewModel
 import com.wintam.viewmodel.InscripcionUiState
 import com.wintam.viewmodel.InscripcionViewModel
+import com.wintam.viewmodel.ReportUiState
 import com.wintam.viewmodel.ReportViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,29 +86,45 @@ fun CataDetailScreen(
     val attendees by inscripcionViewModel.attendees.collectAsState()
     var showReportDialog by remember { mutableStateOf(false) }
     var selectedUsername by remember { mutableStateOf("") }
+    val reportUiState by reportViewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        val cataId = viewModel.selectedCata.value?.id ?: return@LaunchedEffect
-        inscripcionViewModel.loadAttendees(cataId)
-    }
-    LaunchedEffect(inscripcionUiState) {
-        when (inscripcionUiState) {
-            is InscripcionUiState.Success -> {
-                yaInscrito = true
-                snackbarHostState.showSnackbar(
-                    message = "¡Inscrito correctamente!",
-                    duration = SnackbarDuration.Short
-                )
-                inscripcionViewModel.resetState()
-            }
-            is InscripcionUiState.Error -> {
-                snackbarHostState.showSnackbar((inscripcionUiState as InscripcionUiState.Error).message)
-                inscripcionViewModel.resetState()
-            }
-            else -> {}
-        }
-    }
+
+
     cata?.let { cata->
+        LaunchedEffect(Unit) {
+            inscripcionViewModel.loadAttendees(cata.id)
+        }
+        LaunchedEffect(inscripcionUiState) {
+            when (inscripcionUiState) {
+                is InscripcionUiState.Success -> {
+                    yaInscrito = true
+                    snackbarHostState.showSnackbar(
+                        message = "¡Inscrito correctamente!",
+                        duration = SnackbarDuration.Short
+                    )
+                    inscripcionViewModel.resetState()
+                }
+                is InscripcionUiState.Error -> {
+                    snackbarHostState.showSnackbar((inscripcionUiState as InscripcionUiState.Error).message)
+                    inscripcionViewModel.resetState()
+                }
+                else -> {}
+            }
+        }
+
+        LaunchedEffect(reportUiState) {
+            when (reportUiState) {
+                is ReportUiState.Success -> {
+                    snackbarHostState.showSnackbar("Reporte enviado correctamente")
+                    reportViewModel.resetState()
+                }
+                is ReportUiState.Error -> {
+                    snackbarHostState.showSnackbar((reportUiState as ReportUiState.Error).message)
+                    reportViewModel.resetState()
+                }
+                else -> {}
+            }
+        }
         Scaffold(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             topBar = {
