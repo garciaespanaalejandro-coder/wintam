@@ -167,19 +167,16 @@ fun AppNavigation(){
             )
         }
 
-        composable("cataDetail/{id}") {
+        composable("cataDetail/{id}") { backStackEntry ->
+            val id = backStackEntry.arguments?.getString("id")?.toLong() ?: return@composable
             CataDetailScreen(
-                reportViewModel= reportViewModel,
+                reportViewModel = reportViewModel,
                 viewModel = cataViewModel,
                 inscripcionViewModel = inscripcionViewModel,
-                tokenManager= tokenManager,
-                onNavigateBack = {
-                    navController.navigate("feed")
-                },
-                onNavigateToStartCata = { id->
-                    navController.navigate("createCata"){
-                        popUpTo("startCata/$id") { inclusive = true }
-                    }
+                tokenManager = tokenManager,
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToStartCata = { cataId ->
+                    navController.navigate("startCata/$cataId")
                 }
             )
         }
