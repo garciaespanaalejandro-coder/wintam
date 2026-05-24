@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -28,9 +27,10 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SelectableDates
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
@@ -48,14 +48,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wintam.data.remote.dto.CreateCataRequest
 import com.wintam.data.remote.dto.ExperienceLevel
+import com.wintam.ui.components.WintamTextField
 import com.wintam.ui.dialogs.WintamDatePickerDialog
 import com.wintam.ui.screens.dialogs.TimePickerDialog
-import com.wintam.ui.theme.Border
 import com.wintam.ui.theme.Burgundy
 import com.wintam.ui.theme.BurgundySoft
 import com.wintam.ui.theme.Cream
 import com.wintam.ui.theme.DMSans
-import com.wintam.ui.theme.TextPrimary
 import com.wintam.ui.theme.TextSecondary
 import com.wintam.utils.formatDate
 import com.wintam.utils.formatTime
@@ -84,16 +83,28 @@ fun CreateCataScreen(
     )
     var showTimePicker by remember { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
+    val datePickerState = rememberDatePickerState(
+        selectableDates = object : SelectableDates{
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis >= System.currentTimeMillis()
+            }
+        }
+    )
+    val snackbarHostState= remember { SnackbarHostState() }
 
     LaunchedEffect(uiState) {
-        if (uiState is CataUiState.Success) {
+        if (uiState is CataUiState.Success){
             viewModel.resetState()
             onCataCreated()
+        }
+        if (uiState is CataUiState.Error){
+            snackbarHostState.showSnackbar((uiState as CataUiState.Error).message)
+            viewModel.resetState()
         }
     }
 
     Scaffold(
+        snackbarHost= {SnackbarHost(snackbarHostState)},
         topBar = {
             TopAppBar(
                 title = { Text("Crear cata", fontFamily = DMSans) },
@@ -114,42 +125,18 @@ fun CreateCataScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            WintamTextField(
                 value = title,
-                onValueChange = { title = it },
-                label = { Text("Título", fontFamily = DMSans) },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                onValueChange = { title = it},
+                label = "Título"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            WintamTextField(
                 value = wineType,
-                onValueChange = { wineType = it },
-                label = { Text("Tipo de vino", fontFamily = DMSans) },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                onValueChange = {wineType = it},
+                label = "Tipo de vino"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -180,51 +167,25 @@ fun CreateCataScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            WintamTextField(
                 value = location,
                 onValueChange = { location = it },
-                label = { Text("Ubicación", fontFamily = DMSans) },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                label = "Ubicación"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            WintamTextField(
                 value = scheduleDate,
                 onValueChange = {},
+                label = "Fecha",
                 readOnly = true,
-                label = { Text("Fecha", fontFamily = DMSans) },
+                modifier = Modifier.clickable{showDatePicker = true},
                 trailingIcon = {
                     IconButton(onClick = { showDatePicker = true }) {
-                        Icon(
-                            Icons.Default.DateRange,
-                            contentDescription = null,
-                            tint = TextSecondary
-                        )
+                        Icon(Icons.Default.DateRange, contentDescription = null, tint = TextSecondary)
                     }
-                },
-                modifier = Modifier.fillMaxWidth().clickable { showDatePicker = true },
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                }
             )
 
             if (showDatePicker) {
@@ -237,27 +198,17 @@ fun CreateCataScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            WintamTextField(
                 value = scheduledTime,
                 onValueChange = {},
+                label = "Hora",
                 readOnly = true,
-                label = { Text("Hora", fontFamily = DMSans) },
+                modifier = Modifier.clickable { showTimePicker = true },
                 trailingIcon = {
                     IconButton(onClick = { showTimePicker = true }) {
                         Icon(Icons.Default.Schedule, contentDescription = null, tint = TextSecondary)
                     }
-                },
-                modifier = Modifier.fillMaxWidth().clickable { showTimePicker = true },
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                }
             )
             if (showTimePicker) {
                 TimePickerDialog(
@@ -268,37 +219,14 @@ fun CreateCataScreen(
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            WintamTextField(
                 value = maxAttendees,
                 onValueChange = { maxAttendees = it },
-                label = { Text("Plazas máximas", fontFamily = DMSans) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                label = "Plazas máximas",
+                keyboardType = KeyboardType.Number
             )
 
             Spacer(modifier = Modifier.height(28.dp))
-
-            if (uiState is CataUiState.Error) {
-                Text(
-                    text = (uiState as CataUiState.Error).message,
-                    color = com.wintam.ui.theme.Error,
-                    fontFamily = DMSans,
-                    fontSize = 13.sp,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-            }
 
             Button(
                 onClick = {

@@ -66,8 +66,8 @@ fun FeedScreen(
     onNavigateToCreateCata: () -> Unit,
     onNavigateToProfile: () -> Unit,
 ){
-    val uiState by viewModel.uiState.collectAsState();
-    val catas by viewModel.catas.collectAsState();
+    val uiState by viewModel.uiState.collectAsState()
+    val catas by viewModel.catas.collectAsState()
     var searchQuery by remember { mutableStateOf("") }
     var selectedWineType by remember { mutableStateOf<String?>(null)}
     var selectedLevel by remember{ mutableStateOf<String?>(null)}
