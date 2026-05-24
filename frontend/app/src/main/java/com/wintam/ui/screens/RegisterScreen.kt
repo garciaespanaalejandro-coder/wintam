@@ -67,6 +67,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import com.wintam.data.remote.dto.RegisterRequest
 import com.wintam.ui.components.WintamTextField
+import com.wintam.ui.dialogs.WintamDatePickerDialog
 import com.wintam.ui.theme.BurgundySoft
 import com.wintam.ui.theme.Cream
 import com.wintam.ui.theme.Error
@@ -245,26 +246,11 @@ fun RegisterScreen(
             )
 
             if (showDatePicker) {
-                DatePickerDialog(
-                    onDismissRequest = { showDatePicker = false },
-                    confirmButton = {
-                        TextButton(onClick = {
-                            datePickerState.selectedDateMillis?.let {
-                                birthdate = formatDate(it)
-                            }
-                            showDatePicker = false
-                        }) {
-                            Text("Aceptar", color = Burgundy)
-                        }
-                    },
-                    dismissButton = {
-                        TextButton(onClick = { showDatePicker = false }) {
-                            Text("Cancelar", color = TextSecondary)
-                        }
-                    }
-                ) {
-                    DatePicker(state = datePickerState)
-                }
+                WintamDatePickerDialog(
+                    datePickerState = datePickerState,
+                    onConfirm = { millis -> birthdate = formatDate(millis) },
+                    onDismiss = { showDatePicker = false }
+                )
             }
             Spacer(modifier = Modifier.height(16.dp))
 

@@ -22,6 +22,9 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -63,21 +66,26 @@ fun VerifyEmailScreen(
     val pendingEmail by viewModel.pendingEmail.collectAsState()
     val focusRequesters = remember { List(6) { FocusRequester() } }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(uiState) {
         if (uiState is AuthUiState.Success) {
             viewModel.resetState()
             onVerifySuccess()
         }
+        if (uiState is AuthUiState.Error) {
+            snackbarHostState.showSnackbar((uiState as AuthUiState.Error).message)
+            viewModel.resetState()
+        }
     }
-
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Surface)
-    ) {
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) {padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(padding)
+                .background(Surface)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally
