@@ -53,8 +53,14 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.ui.text.style.TextAlign
 import com.wintam.data.remote.dto.LoginRequest
+import com.wintam.ui.components.WintamTextField
 import com.wintam.ui.theme.BurgundySoft
 import com.wintam.ui.theme.Cream
 import com.wintam.ui.theme.Error
@@ -68,22 +74,27 @@ fun LoginScreen(
     onNavigateToRecoverPassword: () -> Unit
 ){
     val uiState by viewModel.uiState.collectAsState()
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+
 
     LaunchedEffect(uiState) {
         if (uiState is AuthUiState.Success){
             viewModel.resetState()
             onLoginSuccess()
         }
+        if(uiState is AuthUiState.Error){
+            snackbarHostState.showSnackbar((uiState as AuthUiState.Error).message)
+            viewModel.resetState()
+        }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Surface)
-    ){
+    Scaffold (
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ){padding ->
         Column(
             modifier = Modifier
                  .fillMaxSize()
@@ -118,58 +129,30 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            OutlinedTextField(
-                value= email,
-                onValueChange = {email= it},
-                label= {
-                    Text("Correo electrónico", fontFamily = DMSans, fontSize = 14.sp)
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.fillMaxWidth(),
-                shape= RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+            WintamTextField(
+                value = email,
+                onValueChange = { email = it },
+                label = "Correo electrónico",
+                keyboardType = KeyboardType.Email
             )
 
-            OutlinedTextField(
+            Spacer(modifier = Modifier.height(16.dp))
+
+            WintamTextField(
                 value = password,
-                onValueChange = { password = it },
-                label = {
-                    Text("Contraseña", fontFamily = DMSans, fontSize = 14.sp)
-                },
-                singleLine = true,
-                visualTransformation = if (passwordVisible) VisualTransformation.None
-                else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                onValueChange = {password = it},
+                label = "Contraseña",
+                keyboardType = KeyboardType.Password,
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
-                            imageVector = if (passwordVisible) Icons.Default.VisibilityOff
-                            else Icons.Default.Visibility,
+                            imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                             contentDescription = null,
                             tint = TextSecondary
                         )
                     }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                }
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -182,18 +165,6 @@ fun LoginScreen(
                     color = Burgundy,
                     modifier = Modifier.clickable { onNavigateToRecoverPassword() }
                 )
-            }
-
-            if (uiState is AuthUiState.Error) {
-                Text(
-                    text = (uiState as AuthUiState.Error).message,
-                    fontFamily = DMSans,
-                    fontSize = 13.sp,
-                    color = Error,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(12.dp))
             }
 
             Spacer(modifier = Modifier.height(16.dp))

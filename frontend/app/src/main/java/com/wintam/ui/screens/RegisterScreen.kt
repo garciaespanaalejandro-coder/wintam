@@ -59,9 +59,14 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DisplayMode
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import com.wintam.data.remote.dto.RegisterRequest
+import com.wintam.ui.components.WintamTextField
 import com.wintam.ui.theme.BurgundySoft
 import com.wintam.ui.theme.Cream
 import com.wintam.ui.theme.Error
@@ -73,11 +78,11 @@ fun RegisterScreen(
     viewModel: AuthViewModel,
     onNavigateToVerify: () -> Unit,
     onNavigateToLogin: () -> Unit
-){
+) {
     val uiState by viewModel.uiState.collectAsState()
 
     var email by remember { mutableStateOf("") }
-    var password by remember {mutableStateOf("")}
+    var password by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
     var surname by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
@@ -90,29 +95,35 @@ fun RegisterScreen(
     )
     val passwordsMatch = password == confirmPassword
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(uiState) {
-        if (uiState is AuthUiState.Success){
+        if (uiState is AuthUiState.Success) {
             viewModel.resetState()
             onNavigateToVerify()
         }
+        if (uiState is AuthUiState.Error) {
+            snackbarHostState.showSnackbar((uiState as AuthUiState.Error).message)
+            viewModel.resetState()
+        }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Surface)
-    ){
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { padding ->
         Column(
-            modifier=Modifier
+            modifier = Modifier
                 .fillMaxSize()
+                .padding(padding)
+                .background(Surface)
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 28.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Spacer(modifier = Modifier.height(64.dp))
             Image(
-                painter = painterResource(id= R.drawable.logo_burgundy),
-                contentDescription= "Wintam logo",
+                painter = painterResource(id = R.drawable.logo_burgundy),
+                contentDescription = "Wintam logo",
                 modifier = Modifier.size(72.dp)
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -124,176 +135,85 @@ fun RegisterScreen(
                 color = TextPrimary
             )
 
-            Spacer(modifier= Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(6.dp))
 
             Text(
                 text = "Únete a la comunidad",
                 fontFamily = DMSans,
                 fontSize = 14.sp,
-                color= TextSecondary
+                color = TextSecondary
             )
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            OutlinedTextField(
-                value= name,
-                onValueChange = {name= it},
-                label= {
-                    Text("Nombre", fontFamily = DMSans, fontSize = 14.sp)
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                modifier = Modifier.fillMaxWidth(),
-                shape= RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+            WintamTextField(value = name, onValueChange = { name = it }, label = "Nombre")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            WintamTextField(value = surname, onValueChange = { surname = it }, label = "Apellidos")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            WintamTextField(
+                value = username,
+                onValueChange = { username = it },
+                label = "Nombre de usuario"
+            )
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            WintamTextField(
+                value = email,
+                onValueChange = {email = it},
+                label = "Email",
+                keyboardType = KeyboardType.Email
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
-                value= surname,
-                onValueChange = {surname= it},
-                label= {
-                    Text("Apellidos", fontFamily = DMSans, fontSize = 14.sp)
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                modifier = Modifier.fillMaxWidth(),
-                shape= RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            OutlinedTextField(
-                value= username,
-                onValueChange = {username= it},
-                label= {
-                    Text("Nombre de Usuario", fontFamily = DMSans, fontSize = 14.sp)
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                modifier = Modifier.fillMaxWidth(),
-                shape= RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value= email,
-                onValueChange = {email= it},
-                label= {
-                    Text("Email", fontFamily = DMSans, fontSize = 14.sp)
-                },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.fillMaxWidth(),
-                shape= RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
+            WintamTextField(
                 value = password,
                 onValueChange = { password = it },
-                label = {
-                    Text("Contraseña", fontFamily = DMSans, fontSize = 14.sp)
-                },
-                singleLine = true,
-                visualTransformation = if (passwordVisible) VisualTransformation.None
-                else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                label = "Contraseña",
+                keyboardType = KeyboardType.Password,
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
-                            imageVector = if (passwordVisible) Icons.Default.VisibilityOff
-                            else Icons.Default.Visibility,
+                            imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                             contentDescription = null,
                             tint = TextSecondary
                         )
                     }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                }
             )
+            if (password.isNotBlank() && password.length < 6) {
+                Text(
+                    text = "La contraseña debe tener al menos 6 caracteres",
+                    fontFamily = DMSans,
+                    fontSize = 12.sp,
+                    color = Error
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            WintamTextField(
                 value = confirmPassword,
                 onValueChange = { confirmPassword = it },
-                label = {
-                    Text("Confirmar contraseña", fontFamily = DMSans, fontSize = 14.sp)
-                },
-                singleLine = true,
-                visualTransformation = if (passwordVisible) VisualTransformation.None
-                else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                label = "Confirmar contraseña",
+                keyboardType = KeyboardType.Password,
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
                     IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
-                            imageVector = if (passwordVisible) Icons.Default.VisibilityOff
-                            else Icons.Default.Visibility,
+                            imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
                             contentDescription = null,
                             tint = TextSecondary
                         )
                     }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                }
             )
 
             if (!passwordsMatch && confirmPassword.isNotBlank()) {
@@ -307,35 +227,21 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            OutlinedTextField(
+            WintamTextField(
                 value = birthdate,
                 onValueChange = {},
+                label = "Fecha de nacimiento",
                 readOnly = true,
-                label = {
-                    Text("Fecha de nacimiento", fontFamily = DMSans, fontSize = 14.sp)
-                },
+                modifier = Modifier.clickable { showDatePicker = true },
                 trailingIcon = {
                     IconButton(onClick = { showDatePicker = true }) {
                         Icon(
-                            imageVector = Icons.Default.DateRange,
+                            Icons.Default.DateRange,
                             contentDescription = null,
                             tint = TextSecondary
                         )
                     }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { showDatePicker = true },
-                shape = RoundedCornerShape(12.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = Burgundy,
-                    unfocusedBorderColor = Border,
-                    focusedLabelColor = Burgundy,
-                    unfocusedLabelColor = TextSecondary,
-                    cursorColor = Burgundy,
-                    focusedTextColor = TextPrimary,
-                    unfocusedTextColor = TextPrimary
-                )
+                }
             )
 
             if (showDatePicker) {
@@ -377,7 +283,7 @@ fun RegisterScreen(
                 },
                 enabled = name.isNotBlank() && surname.isNotBlank() && username.isNotBlank()
                         && email.isNotBlank() && password.isNotBlank() && birthdate.isNotBlank()
-                        && passwordsMatch && uiState !is AuthUiState.Loading,
+                        && passwordsMatch && password.length >= 6 && uiState !is AuthUiState.Loading,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),
