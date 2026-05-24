@@ -15,14 +15,28 @@ class AuthRepository(private val tokenManager: TokenManager) {
 
     suspend fun signIn(request: LoginRequest): Result<AuthResponse> {
         return safeApiCall(
-            errorMessages = mapOf(
-                401 to "Email o contraseña incorrectos"
-            )
-        ) { api.signIn(request) }
+            errorMessages = mapOf(401 to "Email o contraseña incorrectos")
+        ) { api.signIn(request) }.also { result ->
+            result.onSuccess { response ->
+                tokenManager.saveAuthData(
+                    token = response.token,
+                    username = response.username,
+                    role = response.role
+                )
+            }
+        }
     }
 
     suspend fun verifyEmail(request: VerifyRequest): Result<AuthResponse> {
-        return safeApiCall { api.verifyEmail(request) }
+        return safeApiCall { api.verifyEmail(request) }.also { result ->
+            result.onSuccess { response ->
+                tokenManager.saveAuthData(
+                    token = response.token,
+                    username = response.username,
+                    role = response.role
+                )
+            }
+        }
     }
 
     suspend fun recoverPassword(request: RecoverRequest): Result<MessageResponse> {

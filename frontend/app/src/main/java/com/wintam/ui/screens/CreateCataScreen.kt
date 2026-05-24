@@ -213,7 +213,10 @@ fun CreateCataScreen(
             if (showTimePicker) {
                 TimePickerDialog(
                     timePickerState= timePickerState,
-                    onConfirm = {hour, minute -> scheduledTime= formatTime(hour, minute)},
+                    onConfirm = { hour, minute ->
+                        scheduledTime = formatTime(hour, minute)
+                        showTimePicker = false
+                    },
                     onDismiss = {showTimePicker=false}
                 )
             }
