@@ -48,11 +48,11 @@ public class ReportServiceSpirng implements ReportService{
     @Override
     @Transactional
     public List<ReportProfileResponse> getReport() {
-        List<ReportProfileResponse> responseList= new ArrayList<>();
-        List<Report> reportList= this.reportRepository.findAll();
+        List<ReportProfileResponse> responseList = new ArrayList<>();
+        List<Report> reportList = this.reportRepository.findByStatus(ReportStatus.PENDING);
 
         for (Report report : reportList) {
-            ReportProfileResponse response= new ReportProfileResponse(
+            ReportProfileResponse response = new ReportProfileResponse(
                     report.getId(),
                     report.getReporter().getUsername(),
                     report.getReported().getUsername(),
