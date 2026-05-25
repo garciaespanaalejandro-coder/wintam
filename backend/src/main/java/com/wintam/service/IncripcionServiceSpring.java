@@ -1,5 +1,6 @@
 package com.wintam.service;
 
+import com.wintam.dto.AttendeeResponse;
 import com.wintam.dto.ConfirmAttendanceRequest;
 import com.wintam.dto.MessageResponse;
 import com.wintam.exception.*;
@@ -28,17 +29,19 @@ public class IncripcionServiceSpring implements InscripcionService{
 
 
     @Override
-    public List<String> getAttendees(Long id) {
-        Cata cata = cataDAO.findById(id)
-                .orElseThrow(() -> new CataNotFoundException(id));
+    public List<AttendeeResponse> getAttendees(Long cataId) {
+        List<Inscripcion> inscripciones = inscripcionDAO.findByCataId(cataId);
+        List<AttendeeResponse> result = new ArrayList<>();
 
-        List<Inscripcion> inscripcionList= inscripcionDAO.findByCata(cata);
-        List<String> responseList = new ArrayList<>();
-
-        for (Inscripcion inscripcion : inscripcionList) {
-            responseList.add(inscripcion.getPlayer().getUsername());
+        for (Inscripcion inscripcion : inscripciones) {
+            AttendeeResponse attendee = new AttendeeResponse(
+                    inscripcion.getPlayer().getKarma(),
+                    inscripcion.getPlayer().getUsername()
+            );
+            result.add(attendee);
         }
-        return responseList;
+
+        return result;
     }
 
     @Transactional

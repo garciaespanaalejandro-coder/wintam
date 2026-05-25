@@ -1,5 +1,6 @@
 package com.wintam.controller;
 
+import com.wintam.dto.AttendeeResponse;
 import com.wintam.dto.ConfirmAttendanceRequest;
 import com.wintam.dto.MessageResponse;
 import com.wintam.service.InscripcionService;
@@ -34,7 +35,7 @@ public class InscripcionRestController {
     }
 
     @GetMapping("/getAttendees/{cataId}")
-    public ResponseEntity<List<String>> getAttendees(@PathVariable Long cataId){
+    public ResponseEntity<List<AttendeeResponse>> getAttendees(@PathVariable Long cataId){
         return ResponseEntity.ok(inscripcionService.getAttendees(cataId));
     }
 
