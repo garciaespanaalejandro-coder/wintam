@@ -3,6 +3,7 @@ package com.wintam.data.repository
 import com.wintam.data.TokenManager
 import com.wintam.data.remote.RetrofitClient
 import com.wintam.data.remote.WintamApiService
+import com.wintam.data.remote.dto.AttendeeResponse
 import com.wintam.data.remote.dto.ConfirmAttendanceRequest
 import com.wintam.data.remote.dto.MessageResponse
 import com.wintam.utils.safeApiCall
@@ -32,7 +33,7 @@ class InscripcionRepository (private val tokenManager: TokenManager){
         return safeApiCall { api().confirmAttendance(request) }
     }
 
-    suspend fun getAttendees(id: Long): Result<List<String>>{
+    suspend fun getAttendees(id: Long): Result<List<AttendeeResponse>> {
         return safeApiCall { api().getAttendees(id) }
     }
 }

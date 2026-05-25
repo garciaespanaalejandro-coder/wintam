@@ -83,6 +83,16 @@ class CataViewModel(private val repository: CataRepository): ViewModel(){
         }
     }
 
+    fun cancelCata(id: Long) {
+        viewModelScope.launch {
+            _uiState.value = CataUiState.Loading
+            repository.cancelCata(id).fold(
+                onSuccess = { _uiState.value = CataUiState.Success(it.message) },
+                onFailure = { _uiState.value = CataUiState.Error(it.message ?: "Error desconocido") }
+            )
+        }
+    }
+
     fun resetState() {
         _uiState.value = CataUiState.Idle
     }

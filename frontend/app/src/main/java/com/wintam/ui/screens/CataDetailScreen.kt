@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.School
 import androidx.compose.material.icons.filled.WineBar
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -61,6 +62,7 @@ import com.wintam.ui.theme.DMSans
 import com.wintam.ui.theme.PlayfairDisplay
 import com.wintam.ui.theme.TextPrimary
 import com.wintam.ui.theme.TextSecondary
+import com.wintam.viewmodel.CataUiState
 import com.wintam.viewmodel.CataViewModel
 import com.wintam.viewmodel.InscripcionUiState
 import com.wintam.viewmodel.InscripcionViewModel
@@ -88,12 +90,10 @@ fun CataDetailScreen(
     var selectedUsername by remember { mutableStateOf("") }
     val reportUiState by reportViewModel.uiState.collectAsState()
 
+    val cataUiState by viewModel.uiState.collectAsState()
 
 
     cata?.let { cata->
-        LaunchedEffect(Unit) {
-            inscripcionViewModel.loadAttendees(cata.id)
-        }
         LaunchedEffect(inscripcionUiState) {
             when (inscripcionUiState) {
                 is InscripcionUiState.Success -> {
@@ -107,6 +107,23 @@ fun CataDetailScreen(
                 is InscripcionUiState.Error -> {
                     snackbarHostState.showSnackbar((inscripcionUiState as InscripcionUiState.Error).message)
                     inscripcionViewModel.resetState()
+                }
+                else -> {}
+            }
+        }
+        LaunchedEffect(Unit) {
+            inscripcionViewModel.loadAttendees(cata.id)
+        }
+        LaunchedEffect(cataUiState) {
+            when (cataUiState) {
+                is CataUiState.Success -> {
+                    snackbarHostState.showSnackbar((cataUiState as CataUiState.Success).message ?: "Hecho")
+                    viewModel.resetState()
+                    onNavigateBack()
+                }
+                is CataUiState.Error -> {
+                    snackbarHostState.showSnackbar((cataUiState as CataUiState.Error).message)
+                    viewModel.resetState()
                 }
                 else -> {}
             }
@@ -193,11 +210,27 @@ fun CataDetailScreen(
                     Button(onClick = {onNavigateToStartCata(cata.id)}){
                         Text("Iniciar Cata")
                     }
+                    Button(
+                        onClick = { viewModel.cancelCata(cata.id) },
+                        colors = ButtonDefaults.buttonColors(containerColor = BurgundyDark)
+                    ) {
+                        Text("Cancelar cata", color = Cream, fontFamily = DMSans)
+                    }
                 }else{
-                    Button(onClick = {inscripcionViewModel.joinCata(cata.id)}) {
-                        Text(if (yaInscrito) "Ya inscrito" else "Inscribirse")
+                    if (cata.cataStatus == CataStatus.OPEN || cata.cataStatus == CataStatus.FULL) {
+                        Button(onClick = {inscripcionViewModel.joinCata(cata.id)}) {
+                            Text(if (yaInscrito) "Ya inscrito" else "Inscribirse")
                     }
 
+                    }
+                    if (yaInscrito) {
+                        Button(
+                            onClick = { inscripcionViewModel.cancelCata(cata.id) },
+                            colors = ButtonDefaults.buttonColors(containerColor = BurgundyDark)
+                        ) {
+                            Text("Cancelar inscripción", color = Cream, fontFamily = DMSans)
+                        }
+                    }
                     if(cata.cataStatus== CataStatus.ACTIVE){
                         Button(onClick = {showConfirmDialog=true}) {
                             Text("Confirmar asistencia")
@@ -241,20 +274,28 @@ fun CataDetailScreen(
                     color = TextSecondary,
                     modifier = Modifier.padding(start = 16.dp)
                 )
-                attendees.forEach { username->
+                attendees.forEach { attendee ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = "@$username",
-                            fontFamily = DMSans,
-                            fontSize = 14.sp,
-                            color = TextPrimary
-                        )
-                        TextButton( onClick = {
-                            selectedUsername = username
+                        Column {
+                            Text(
+                                text = "@${attendee.username}",
+                                fontFamily = DMSans,
+                                fontSize = 14.sp,
+                                color = TextPrimary
+                            )
+                            Text(
+                                text = "Karma: ${attendee.karma}",
+                                fontFamily = DMSans,
+                                fontSize = 12.sp,
+                                color = TextSecondary
+                            )
+                        }
+                        TextButton(onClick = {
+                            selectedUsername = attendee.username
                             showReportDialog = true
                         }) {
                             Text("Reportar", color = Burgundy, fontFamily = DMSans, fontSize = 12.sp)

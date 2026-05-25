@@ -77,7 +77,7 @@ interface WintamApiService {
     suspend fun confirmAttendance (@Body request: ConfirmAttendanceRequest): MessageResponse
 
     @GET("api/inscripcion/getAttendees/{cataId}")
-    suspend fun getAttendees(@Path("cataId") cataId: Long): List<String>
+    suspend fun getAttendees(@Path("cataId") cataId: Long): List<AttendeeResponse>
 
     //-------------------REPORTES----------------------------------------------------------------------
 

@@ -55,3 +55,8 @@ data class UserProfileResponse(
     val description: String?,
     val karma: Int
 )
+
+data class AttendeeResponse(
+    val karma: Int,
+    val username: String
+)

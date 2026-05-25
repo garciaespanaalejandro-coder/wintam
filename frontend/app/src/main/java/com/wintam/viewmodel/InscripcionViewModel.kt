@@ -2,6 +2,7 @@ package com.wintam.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wintam.data.remote.dto.AttendeeResponse
 import com.wintam.data.remote.dto.ConfirmAttendanceRequest
 import com.wintam.data.repository.InscripcionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +19,8 @@ sealed class InscripcionUiState{
 class InscripcionViewModel (private val repository: InscripcionRepository): ViewModel(){
     private val _uiState = MutableStateFlow<InscripcionUiState>(InscripcionUiState.Idle)
     val uiState: StateFlow<InscripcionUiState> = _uiState
-    private val _attendees= MutableStateFlow<List<String>>(emptyList())
-    val attendees: StateFlow<List<String>> = _attendees
+    private val _attendees = MutableStateFlow<List<AttendeeResponse>>(emptyList())
+    val attendees: StateFlow<List<AttendeeResponse>> = _attendees
     fun joinCata(id: Long){
         viewModelScope.launch {
             _uiState.value= InscripcionUiState.Loading
