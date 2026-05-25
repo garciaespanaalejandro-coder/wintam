@@ -142,10 +142,12 @@ public class CataServiceSpring implements CataService{
     @Override
     @Transactional
     public List<CataResponse> getAllCatas() {
-        List<CataResponse> cataResponseList= new ArrayList<>();
-        List<Cata> cataList= this.cataDAO.findAll();
+        List<CataResponse> cataResponseList = new ArrayList<>();
+        List<Cata> cataList = this.cataDAO.findAll();
         for (Cata cata : cataList) {
-            cataResponseList.add(cataToCataResponse(cata));
+            if (cata.getStatus() != CataStatus.CANCELLED && cata.getStatus() != CataStatus.FULL) {
+                cataResponseList.add(cataToCataResponse(cata));
+            }
         }
         return cataResponseList;
     }
