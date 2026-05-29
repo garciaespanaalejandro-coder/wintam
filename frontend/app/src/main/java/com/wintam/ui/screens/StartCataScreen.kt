@@ -39,23 +39,30 @@ import com.wintam.ui.theme.TextPrimary
 import com.wintam.ui.theme.TextSecondary
 import com.wintam.viewmodel.CataUiState
 import com.wintam.viewmodel.CataViewModel
+import com.wintam.viewmodel.InscripcionViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StartCataScreen(
     viewModel: CataViewModel,
+    inscripcionViewModel: InscripcionViewModel,
     onNavigateBack: () -> Unit
 ){
     val uiState by viewModel.uiState.collectAsState()
     val attendanceCode by viewModel.attendanceCode.collectAsState()
     val cata by viewModel.selectedCata.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val attendees by inscripcionViewModel.attendees.collectAsState()
 
     LaunchedEffect(uiState) {
         if (uiState is CataUiState.Error) {
             snackbarHostState.showSnackbar((uiState as CataUiState.Error).message)
             viewModel.resetState()
         }
+    }
+
+    LaunchedEffect(Unit) {
+        cata?.let { inscripcionViewModel.loadAttendees(it.id) }
     }
 
     Scaffold(
@@ -118,6 +125,18 @@ fun StartCataScreen(
                         color= Burgundy,
                         modifier = Modifier.padding(16.dp)
                     )
+
+                    if(attendees.isNotEmpty()){
+                        Button(
+                            onClick = {viewModel.completeCata(cata.id)},
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).height(52.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = Burgundy)
+                        ) {
+                            Text("Finalizar cata", color = Cream, fontFamily = DMSans)
+                        }
+                    }
+                    
                 }
             }
         }

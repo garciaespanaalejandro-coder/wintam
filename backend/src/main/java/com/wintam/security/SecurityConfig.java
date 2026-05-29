@@ -25,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-//puta
+
     private final JwtAuthFilter jwtAuthFilter;
     private final UserRepository userRepository;
 

@@ -58,5 +58,10 @@ public class CataRestController {
         return ResponseEntity.status(HttpStatus.OK).body(cataService.getAllCatas());
     }
 
+    @PatchMapping("/completeCata/{id}")
+    public ResponseEntity<MessageResponse> completeCata(@PathVariable Long id){
+        System.out.println("completeCata llamado con id: " + id);
+        return ResponseEntity.ok(cataService.completeCata(id));
+    }
 
 }
