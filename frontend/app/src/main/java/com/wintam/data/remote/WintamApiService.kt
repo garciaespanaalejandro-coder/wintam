@@ -54,9 +54,6 @@ interface WintamApiService {
     @GET("api/cata/getAllCatas")
     suspend fun getAllCatas(): List<CataResponse>
 
-    @PATCH("api/cata/completeCata/{id}")
-    suspend fun completeCata(@Path("id") id: Long): MessageResponse
-
     //-------------------USUARIOS----------------------------------------------------------------------
 
     @PATCH("api/user/updateProfile")

@@ -45,14 +45,12 @@ import com.wintam.viewmodel.InscripcionViewModel
 @Composable
 fun StartCataScreen(
     viewModel: CataViewModel,
-    inscripcionViewModel: InscripcionViewModel,
     onNavigateBack: () -> Unit
 ){
     val uiState by viewModel.uiState.collectAsState()
     val attendanceCode by viewModel.attendanceCode.collectAsState()
     val cata by viewModel.selectedCata.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
-    val attendees by inscripcionViewModel.attendees.collectAsState()
 
     LaunchedEffect(uiState) {
         if (uiState is CataUiState.Error) {
@@ -61,9 +59,6 @@ fun StartCataScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        cata?.let { inscripcionViewModel.loadAttendees(it.id) }
-    }
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -126,17 +121,6 @@ fun StartCataScreen(
                         modifier = Modifier.padding(16.dp)
                     )
 
-                    if(attendees.isNotEmpty()){
-                        Button(
-                            onClick = {viewModel.completeCata(cata.id)},
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).height(52.dp),
-                            shape = RoundedCornerShape(12.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Burgundy)
-                        ) {
-                            Text("Finalizar cata", color = Cream, fontFamily = DMSans)
-                        }
-                    }
-                    
                 }
             }
         }

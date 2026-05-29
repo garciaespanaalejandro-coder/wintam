@@ -10,5 +10,4 @@ public interface CataService {
     MessageResponse cancelCata(Long id);
     AttendanceCodeResponse startCata(Long id);
     List<CataResponse> getAllCatas();
-    MessageResponse completeCata(Long id);
 }

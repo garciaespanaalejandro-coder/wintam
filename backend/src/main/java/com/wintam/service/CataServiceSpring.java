@@ -152,16 +152,6 @@ public class CataServiceSpring implements CataService{
         return cataResponseList;
     }
 
-    @Override
-    @Transactional
-    public MessageResponse completeCata(Long id) {
-        Cata cata = cataDAO.findById(id)
-                .orElseThrow(()-> new CataNotFoundException(id));
-        cata.setStatus(CataStatus.COMPLETED);
-        cataDAO.save(cata);
-        return new MessageResponse("Cata finalizada correctamente");
-    }
-
     public CataResponse cataToCataResponse(Cata cata){
         CataResponse dto= new CataResponse();
         dto.setId(cata.getId());
