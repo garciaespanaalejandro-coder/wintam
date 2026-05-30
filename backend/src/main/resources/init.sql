@@ -63,3 +63,31 @@ CREATE TABLE IF NOT EXISTS reports (
     CONSTRAINT fk_report_reported FOREIGN KEY (reported_id) REFERENCES users(id)
 );
 
+-- Impedir que un BANNED se inscriba
+DELIMITER $$
+CREATE TRIGGER check_user_not_banned
+BEFORE INSERT ON inscripciones
+FOR EACH ROW
+BEGIN
+  IF (SELECT role FROM users WHERE id = NEW.player_id) = 'BANNED' THEN
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Usuario baneado no puede inscribirse';
+  END IF;
+END$$
+DELIMITER ;
+
+-- Poner la cata como FULL cuando se llena
+DELIMITER $$
+CREATE TRIGGER check_cata_full
+AFTER INSERT ON inscripciones
+FOR EACH ROW
+BEGIN
+  DECLARE confirmados INT;
+  DECLARE max_cap INT;
+  SELECT COUNT(*) INTO confirmados FROM inscripciones
+    WHERE cata_id = NEW.cata_id AND status = 'CONFIRMED';
+  SELECT max_attendees INTO max_cap FROM catas WHERE id = NEW.cata_id;
+  IF confirmados >= max_cap THEN
+    UPDATE catas SET status = 'FULL' WHERE id = NEW.cata_id;
+  END IF;
+END$$
+DELIMITER ;
