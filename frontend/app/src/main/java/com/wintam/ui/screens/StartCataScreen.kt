@@ -51,7 +51,8 @@ import com.wintam.viewmodel.InscripcionViewModel
 fun StartCataScreen(
     viewModel: CataViewModel,
     inscripcionViewModel: InscripcionViewModel,
-    onNavigateBack: () -> Unit
+    onNavigateBack: () -> Unit,
+    onCataFinalized: () -> Unit
 ){
     val uiState by viewModel.uiState.collectAsState()
     val attendanceCode by viewModel.attendanceCode.collectAsState()
@@ -60,9 +61,16 @@ fun StartCataScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(uiState) {
-        if (uiState is CataUiState.Error) {
-            snackbarHostState.showSnackbar((uiState as CataUiState.Error).message)
-            viewModel.resetState()
+        when (uiState) {
+            is CataUiState.Error -> {
+                snackbarHostState.showSnackbar((uiState as CataUiState.Error).message)
+                viewModel.resetState()
+            }
+            is CataUiState.Success -> {
+                viewModel.resetState()
+                onCataFinalized()
+            }
+            else -> {}
         }
     }
 

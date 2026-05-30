@@ -198,9 +198,12 @@ fun AppNavigation(){
             StartCataScreen(
                 viewModel = cataViewModel,
                 inscripcionViewModel = inscripcionViewModel,
-                onNavigateBack ={
-                  navController.popBackStack()
-              }
+                onNavigateBack = { navController.popBackStack() },
+                onCataFinalized = {
+                    navController.navigate("feed") {
+                        popUpTo("startCata/{id}") { inclusive = true }
+                    }
+                }
             )
         }
 
