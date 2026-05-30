@@ -197,6 +197,7 @@ fun AppNavigation(){
         composable("startCata/{id}"){
             StartCataScreen(
                 viewModel = cataViewModel,
+                inscripcionViewModel = inscripcionViewModel,
                 onNavigateBack ={
                   navController.popBackStack()
               }

@@ -30,7 +30,7 @@ public class IncripcionServiceSpring implements InscripcionService{
 
     @Override
     public List<AttendeeResponse> getAttendees(Long cataId) {
-        List<Inscripcion> inscripciones = inscripcionDAO.findByCataId(cataId);
+        List<Inscripcion> inscripciones = inscripcionDAO.findByCataIdAndStatus(cataId, InscripcionStatus.ATTENDED);
         List<AttendeeResponse> result = new ArrayList<>();
 
         for (Inscripcion inscripcion : inscripciones) {

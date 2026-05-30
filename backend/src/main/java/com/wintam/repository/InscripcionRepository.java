@@ -18,4 +18,5 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> 
     int countByCataAndStatus(Cata cata, InscripcionStatus status);
 
     List<Inscripcion> findByCataId(Long cataId);
+    List<Inscripcion> findByCataIdAndStatus(Long cataId, InscripcionStatus status);
 }

@@ -139,6 +139,24 @@ public class CataServiceSpring implements CataService{
 
     }
 
+    @Transactional
+    @Override
+    public MessageResponse finalizeCata(Long id) {
+        Cata cata = cataDAO.findById(id)
+                .orElseThrow(() -> new CataNotFoundException(id));
+        User usuario = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (!cata.getHost().getId().equals(usuario.getId())) {
+            throw new UnuathorizedException();
+        }
+        if (cata.getStatus() != CataStatus.ACTIVE) {
+            throw new InvalidCataStatusException(cata.getStatus());
+        }
+        cata.setStatus(CataStatus.COMPLETED);
+        cataDAO.save(cata);
+        return new MessageResponse("Cata finalizada correctamente.");
+    }
+
     @Override
     @Transactional
     public List<CataResponse> getAllCatas() {

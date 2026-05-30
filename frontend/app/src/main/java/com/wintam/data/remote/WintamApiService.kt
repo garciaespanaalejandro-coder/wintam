@@ -51,6 +51,9 @@ interface WintamApiService {
     @PATCH("api/cata/startCata/{id}")
     suspend fun startCata(@Path("id") id: Long): AttendanceCodeResponse
 
+    @PATCH("api/cata/finalizeCata/{id}")
+    suspend fun finalizeCata(@Path("id") id: Long): MessageResponse
+
     @GET("api/cata/getAllCatas")
     suspend fun getAllCatas(): List<CataResponse>
 

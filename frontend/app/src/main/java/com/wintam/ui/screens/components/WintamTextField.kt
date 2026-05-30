@@ -34,7 +34,7 @@ fun WintamTextField(
 ) {
     OutlinedTextField(
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = { if (it.length <= 150) onValueChange(it) },
         label = { Text(label, fontFamily = DMSans, fontSize = 14.sp) },
         singleLine = singleLine,
         readOnly = readOnly,

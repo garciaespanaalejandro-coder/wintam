@@ -53,6 +53,11 @@ public class CataRestController {
         return ResponseEntity.status(HttpStatus.OK).body(cataService.startCata(id));
     }
 
+    @PatchMapping("/finalizeCata/{id}")
+    public ResponseEntity<MessageResponse> finalizeCata(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(cataService.finalizeCata(id));
+    }
+
     @GetMapping("/getAllCatas")
     public ResponseEntity <List<CataResponse>> getAllCatas(){
         return ResponseEntity.status(HttpStatus.OK).body(cataService.getAllCatas());

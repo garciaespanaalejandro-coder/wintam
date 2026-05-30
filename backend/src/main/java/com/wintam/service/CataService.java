@@ -9,5 +9,6 @@ public interface CataService {
     List<CataResponse> searchCatas(SearchCatasRequest searchCatasRequest);
     MessageResponse cancelCata(Long id);
     AttendanceCodeResponse startCata(Long id);
+    MessageResponse finalizeCata(Long id);
     List<CataResponse> getAllCatas();
 }
