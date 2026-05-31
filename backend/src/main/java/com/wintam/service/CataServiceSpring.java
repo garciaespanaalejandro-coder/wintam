@@ -185,7 +185,7 @@ public class CataServiceSpring implements CataService{
         return dto;
     }
 
-    private String getCode(){
+    public String getCode(){
         return String.valueOf((int)(Math.random() * 90000) + 10000);
     }
 }

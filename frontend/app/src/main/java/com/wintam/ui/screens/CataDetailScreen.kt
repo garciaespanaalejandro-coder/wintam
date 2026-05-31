@@ -29,7 +29,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
+import com.wintam.ui.components.WintamTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -81,7 +81,7 @@ fun CataDetailScreen(
 ){
     val snackbarHostState= remember { SnackbarHostState() }
     val inscripcionUiState by inscripcionViewModel.uiState.collectAsState()
-    var yaInscrito by remember { mutableStateOf(false) }
+    val yaInscrito by inscripcionViewModel.yaInscrito.collectAsState()
     val username by tokenManager.username.collectAsState(initial = "")
     val cata by viewModel.selectedCata.collectAsState()
     var showConfirmDialog by remember { mutableStateOf(false) }
@@ -97,9 +97,8 @@ fun CataDetailScreen(
         LaunchedEffect(inscripcionUiState) {
             when (inscripcionUiState) {
                 is InscripcionUiState.Success -> {
-                    yaInscrito = true
                     snackbarHostState.showSnackbar(
-                        message = "¡Inscrito correctamente!",
+                        message = (inscripcionUiState as InscripcionUiState.Success).message ?: "Hecho",
                         duration = SnackbarDuration.Short
                     )
                     inscripcionViewModel.resetState()
@@ -111,7 +110,8 @@ fun CataDetailScreen(
                 else -> {}
             }
         }
-        LaunchedEffect(Unit) {
+        LaunchedEffect(cata.id) {
+            inscripcionViewModel.resetYaInscrito()
             inscripcionViewModel.loadAttendees(cata.id)
         }
         LaunchedEffect(cataUiState) {
@@ -243,12 +243,11 @@ fun CataDetailScreen(
                             onDismissRequest = { showConfirmDialog = false },
                             title = { Text("Confirmar asistencia", fontFamily = DMSans) },
                             text = {
-                                OutlinedTextField(
+                                WintamTextField(
                                     value = codigo,
                                     onValueChange = { codigo = it },
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                                    label = { Text("Código", fontFamily = DMSans) },
-                                    singleLine = true
+                                    label = "Código",
+                                    keyboardType = KeyboardType.Decimal
                                 )
                             },
                             confirmButton = {

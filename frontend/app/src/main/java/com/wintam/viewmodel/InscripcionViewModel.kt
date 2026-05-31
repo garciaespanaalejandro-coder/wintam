@@ -19,13 +19,19 @@ sealed class InscripcionUiState{
 class InscripcionViewModel (private val repository: InscripcionRepository): ViewModel(){
     private val _uiState = MutableStateFlow<InscripcionUiState>(InscripcionUiState.Idle)
     val uiState: StateFlow<InscripcionUiState> = _uiState
-    private val _attendees = MutableStateFlow<List<AttendeeResponse>>(emptyList())
+    private val _attendees = MutableStateFlow<List<  AttendeeResponse>>(emptyList())
     val attendees: StateFlow<List<AttendeeResponse>> = _attendees
+
+    private val _yaInscrito = MutableStateFlow(false)
+    val yaInscrito: StateFlow<Boolean> = _yaInscrito
     fun joinCata(id: Long){
         viewModelScope.launch {
             _uiState.value= InscripcionUiState.Loading
             repository.joinCata(id).fold(
-                onSuccess = {_uiState.value= InscripcionUiState.Success(it.message) },
+                onSuccess = {
+                    _yaInscrito.value = true
+                    _uiState.value= InscripcionUiState.Success(it.message)
+                },
                 onFailure = {_uiState.value= InscripcionUiState.Error(it.message ?: "Error desconocido")}
             )
         }
@@ -35,10 +41,17 @@ class InscripcionViewModel (private val repository: InscripcionRepository): View
         viewModelScope.launch {
             _uiState.value= InscripcionUiState.Loading
             repository.cancelCata(id).fold(
-                onSuccess = {_uiState.value= InscripcionUiState.Success(it.message) },
+                onSuccess = {
+                    _yaInscrito.value = false
+                    _uiState.value= InscripcionUiState.Success(it.message)
+                },
                 onFailure = {_uiState.value= InscripcionUiState.Error(it.message ?: "Error desconocido")}
             )
         }
+    }
+
+    fun resetYaInscrito() {
+        _yaInscrito.value = false
     }
 
     fun confirmAttendance(request: ConfirmAttendanceRequest){
