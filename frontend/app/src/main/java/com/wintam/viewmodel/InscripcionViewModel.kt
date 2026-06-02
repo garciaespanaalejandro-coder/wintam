@@ -57,6 +57,10 @@ class InscripcionViewModel (private val repository: InscripcionRepository): View
         _yaInscrito.value = false
     }
 
+    fun setYaInscrito(value: Boolean) {
+        _yaInscrito.value = value
+    }
+
     fun confirmAttendance(request: ConfirmAttendanceRequest){
         viewModelScope.launch {
             _uiState.value= InscripcionUiState.Loading

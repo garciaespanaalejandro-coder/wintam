@@ -113,12 +113,15 @@ fun CataDetailScreen(
             }
         }
         LaunchedEffect(cata.id) {
-            inscripcionViewModel.resetYaInscrito()
             inscripcionViewModel.loadRegistered(cata.id)
             while (true) {
                 delay(5000)
+                inscripcionViewModel.loadRegistered(cata.id)
                 viewModel.refreshSelectedCata(cata.id)
             }
+        }
+        LaunchedEffect(attendees, username) {
+            inscripcionViewModel.setYaInscrito(attendees.any { it.username == username })
         }
         LaunchedEffect(cataUiState) {
             when (cataUiState) {

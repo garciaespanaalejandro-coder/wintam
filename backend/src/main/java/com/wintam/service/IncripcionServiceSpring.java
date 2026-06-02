@@ -136,6 +136,9 @@ public class IncripcionServiceSpring implements InscripcionService{
         }
         Inscripcion inscripcion = inscripcionDAO.findByCataAndPlayer(cata, usuario)
                 .orElseThrow(UserNotJoinedException::new);
+        if (inscripcion.getStatus() == InscripcionStatus.ATTENDED) {
+            throw new UserAlreadyJoinedException();
+        }
         karma.rewardAttendance(usuario);
         inscripcion.setStatus(InscripcionStatus.ATTENDED);
         inscripcionDAO.save(inscripcion);
