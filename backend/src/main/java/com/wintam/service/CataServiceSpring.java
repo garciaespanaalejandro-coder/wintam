@@ -65,8 +65,8 @@ public class CataServiceSpring implements CataService{
             parametros.put("title", "%" + request.getTitle() + "%");
         }
         if(request.getWineType()!= null && !request.getWineType().trim().isEmpty()){
-            jpql.append("AND c.wineType = :wineType ");
-            parametros.put("wineType",request.getWineType());
+            jpql.append("AND LOWER(c.wineType) LIKE LOWER(:wineType) ");
+            parametros.put("wineType", "%" + request.getWineType() + "%");
         }
         if (request.getExperienceLevel() != null){
             jpql.append("AND c.experienceLevel = :experienceLevel ");
@@ -157,6 +157,7 @@ public class CataServiceSpring implements CataService{
         }
         cata.setStatus(CataStatus.COMPLETED);
         cataDAO.save(cata);
+        karma.rewardHost(usuario);
         return new MessageResponse("Cata finalizada correctamente.");
     }
 

@@ -23,6 +23,15 @@ public class KarmaServiceSpring implements KarmaService{
 
     @Override
     @Transactional
+    public void rewardHost(User anfitrion) {
+        if (anfitrion.getKarma() < 100) {
+            anfitrion.setKarma(anfitrion.getKarma() + 20);
+            user.save(anfitrion);
+        }
+    }
+
+    @Override
+    @Transactional
     public void penalizeHost(User anfitrion) {
         if(anfitrion.getKarma()>20) {
             anfitrion.setKarma(anfitrion.getKarma() - 20);

@@ -4,6 +4,7 @@ import com.wintam.model.User;
 
 public interface KarmaService {
     void rewardAttendance(User usuario);
+    void rewardHost(User anfitrion);
     void penalizeHost(User anfitrion);
     void penalizeAttendee(User asistente);
 }
