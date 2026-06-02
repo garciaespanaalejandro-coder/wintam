@@ -85,7 +85,7 @@ fun CataDetailScreen(
     val username by tokenManager.username.collectAsState(initial = "")
     val cata by viewModel.selectedCata.collectAsState()
     var showConfirmDialog by remember { mutableStateOf(false) }
-    val attendees by inscripcionViewModel.attendees.collectAsState()
+    val attendees by inscripcionViewModel.registered.collectAsState()
     var showReportDialog by remember { mutableStateOf(false) }
     var selectedUsername by remember { mutableStateOf("") }
     val reportUiState by reportViewModel.uiState.collectAsState()
@@ -112,7 +112,7 @@ fun CataDetailScreen(
         }
         LaunchedEffect(cata.id) {
             inscripcionViewModel.resetYaInscrito()
-            inscripcionViewModel.loadAttendees(cata.id)
+            inscripcionViewModel.loadRegistered(cata.id)
         }
         LaunchedEffect(cataUiState) {
             when (cataUiState) {

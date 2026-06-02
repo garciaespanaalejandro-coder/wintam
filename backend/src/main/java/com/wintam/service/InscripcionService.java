@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface InscripcionService {
     List<AttendeeResponse> getAttendees(Long id);
+    List<AttendeeResponse> getRegistered(Long id);
     MessageResponse joinCata(Long id);
     MessageResponse cancelJoin(Long id);
     MessageResponse confirmAttendance(ConfirmAttendanceRequest request);

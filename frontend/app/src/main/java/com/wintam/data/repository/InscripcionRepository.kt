@@ -36,4 +36,8 @@ class InscripcionRepository (private val tokenManager: TokenManager){
     suspend fun getAttendees(id: Long): Result<List<AttendeeResponse>> {
         return safeApiCall { api().getAttendees(id) }
     }
+
+    suspend fun getRegistered(id: Long): Result<List<AttendeeResponse>> {
+        return safeApiCall { api().getRegistered(id) }
+    }
 }

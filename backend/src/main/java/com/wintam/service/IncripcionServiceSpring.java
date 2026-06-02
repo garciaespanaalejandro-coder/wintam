@@ -44,6 +44,24 @@ public class IncripcionServiceSpring implements InscripcionService{
         return result;
     }
 
+    @Override
+    public List<AttendeeResponse> getRegistered(Long cataId) {
+        List<Inscripcion> inscripciones = inscripcionDAO.findByCataIdAndStatusIn(
+                cataId, List.of(InscripcionStatus.CONFIRMED, InscripcionStatus.ATTENDED)
+        );
+        List<AttendeeResponse> result = new ArrayList<>();
+
+        for (Inscripcion inscripcion : inscripciones) {
+            AttendeeResponse attendee = new AttendeeResponse(
+                    inscripcion.getPlayer().getKarma(),
+                    inscripcion.getPlayer().getUsername()
+            );
+            result.add(attendee);
+        }
+
+        return result;
+    }
+
     @Transactional
     @Override
     public MessageResponse joinCata(Long id) {

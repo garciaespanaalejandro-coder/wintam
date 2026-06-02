@@ -19,4 +19,5 @@ public interface InscripcionRepository extends JpaRepository<Inscripcion, Long> 
 
     List<Inscripcion> findByCataId(Long cataId);
     List<Inscripcion> findByCataIdAndStatus(Long cataId, InscripcionStatus status);
+    List<Inscripcion> findByCataIdAndStatusIn(Long cataId, List<InscripcionStatus> statuses);
 }

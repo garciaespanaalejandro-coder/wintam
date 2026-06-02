@@ -80,6 +80,9 @@ interface WintamApiService {
     @GET("api/inscripcion/getAttendees/{cataId}")
     suspend fun getAttendees(@Path("cataId") cataId: Long): List<AttendeeResponse>
 
+    @GET("api/inscripcion/getRegistered/{cataId}")
+    suspend fun getRegistered(@Path("cataId") cataId: Long): List<AttendeeResponse>
+
     //-------------------REPORTES----------------------------------------------------------------------
 
     @POST("api/report/reportUser")

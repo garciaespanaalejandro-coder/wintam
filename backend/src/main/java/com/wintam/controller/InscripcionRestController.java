@@ -39,4 +39,9 @@ public class InscripcionRestController {
         return ResponseEntity.ok(inscripcionService.getAttendees(cataId));
     }
 
+    @GetMapping("/getRegistered/{cataId}")
+    public ResponseEntity<List<AttendeeResponse>> getRegistered(@PathVariable Long cataId){
+        return ResponseEntity.ok(inscripcionService.getRegistered(cataId));
+    }
+
 }

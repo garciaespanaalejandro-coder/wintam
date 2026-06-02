@@ -19,8 +19,11 @@ sealed class InscripcionUiState{
 class InscripcionViewModel (private val repository: InscripcionRepository): ViewModel(){
     private val _uiState = MutableStateFlow<InscripcionUiState>(InscripcionUiState.Idle)
     val uiState: StateFlow<InscripcionUiState> = _uiState
-    private val _attendees = MutableStateFlow<List<  AttendeeResponse>>(emptyList())
+    private val _attendees = MutableStateFlow<List<AttendeeResponse>>(emptyList())
     val attendees: StateFlow<List<AttendeeResponse>> = _attendees
+
+    private val _registered = MutableStateFlow<List<AttendeeResponse>>(emptyList())
+    val registered: StateFlow<List<AttendeeResponse>> = _registered
 
     private val _yaInscrito = MutableStateFlow(false)
     val yaInscrito: StateFlow<Boolean> = _yaInscrito
@@ -68,6 +71,15 @@ class InscripcionViewModel (private val repository: InscripcionRepository): View
         viewModelScope.launch {
             repository.getAttendees(cataId).fold(
                 onSuccess = { _attendees.value = it },
+                onFailure = { }
+            )
+        }
+    }
+
+    fun loadRegistered(cataId: Long) {
+        viewModelScope.launch {
+            repository.getRegistered(cataId).fold(
+                onSuccess = { _registered.value = it },
                 onFailure = { }
             )
         }
