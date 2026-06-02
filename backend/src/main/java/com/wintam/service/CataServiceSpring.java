@@ -130,6 +130,9 @@ public class CataServiceSpring implements CataService{
         if(!cata.getHost().getId().equals(usuario.getId())){
             throw new UnuathorizedException();
         }
+        if (cata.getStatus() == CataStatus.ACTIVE) {
+            return new AttendanceCodeResponse(cata.getAttendanceCode(), cata.getCodeGeneratedAt());
+        }
         String code=getCode();
         cata.setAttendanceCode(code);
         cata.setCodeGeneratedAt(LocalDateTime.now());

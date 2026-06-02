@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -76,7 +77,12 @@ fun StartCataScreen(
 
     LaunchedEffect(attendanceCode) {
         if (attendanceCode != null) {
-            cata?.let { inscripcionViewModel.loadAttendees(it.id) }
+            cata?.let {
+                while (true) {
+                    inscripcionViewModel.loadAttendees(it.id)
+                    delay(5000)
+                }
+            }
         }
     }
 

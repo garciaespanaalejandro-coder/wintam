@@ -110,7 +110,14 @@ class CataViewModel(private val repository: CataRepository): ViewModel(){
         _uiState.value = CataUiState.Idle
     }
 
+    fun resetAttendanceCode() {
+        _attendanceCode.value = null
+    }
+
     fun selectCata(id: Long) {
+        if (_selectedCata.value?.id != id) {
+            _attendanceCode.value = null
+        }
         _selectedCata.value = _catas.value.find { it.id == id }
     }
 }
