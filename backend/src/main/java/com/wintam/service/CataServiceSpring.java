@@ -73,8 +73,8 @@ public class CataServiceSpring implements CataService{
             parametros.put("experienceLevel",request.getExperienceLevel());
         }
         if (request.getLocation()!= null && !request.getLocation().trim().isEmpty()){
-            jpql.append("AND c.location = :location ");
-            parametros.put("location",request.getLocation());
+            jpql.append("AND LOWER(c.location) LIKE LOWER(:location) ");
+            parametros.put("location", "%" + request.getLocation() + "%");
         }
         if (request.getCataStatus()!=null){
             jpql.append("AND c.status = :cataStatus ");

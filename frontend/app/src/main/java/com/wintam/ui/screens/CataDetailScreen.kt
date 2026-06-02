@@ -39,6 +39,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import kotlinx.coroutines.delay
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -101,6 +102,7 @@ fun CataDetailScreen(
                         message = (inscripcionUiState as InscripcionUiState.Success).message ?: "Hecho",
                         duration = SnackbarDuration.Short
                     )
+                    inscripcionViewModel.loadRegistered(cata.id)
                     inscripcionViewModel.resetState()
                 }
                 is InscripcionUiState.Error -> {
@@ -113,6 +115,10 @@ fun CataDetailScreen(
         LaunchedEffect(cata.id) {
             inscripcionViewModel.resetYaInscrito()
             inscripcionViewModel.loadRegistered(cata.id)
+            while (true) {
+                delay(5000)
+                viewModel.refreshSelectedCata(cata.id)
+            }
         }
         LaunchedEffect(cataUiState) {
             when (cataUiState) {

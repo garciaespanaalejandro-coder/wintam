@@ -55,5 +55,5 @@ class CataRepository(private val tokenManager: TokenManager) {
     suspend fun getAllCatas(): Result<List<CataResponse>> {
         return safeApiCall { api().getAllCatas() }
     }
-    
+
 }
